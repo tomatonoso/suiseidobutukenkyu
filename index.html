@@ -1096,399 +1096,286 @@
     </div>
   </div>
 
-  <script>
-    // --- Canvas Background Animation ---
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    let width, height, bubbles = [];
+<script>
+  // --- Canvas Background Animation ---
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height, bubbles = [];
 
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Bubble {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * width;
+      this.y = height + Math.random() * 100;
+      this.radius = Math.random() * 8 + 2;
+      this.speed = Math.random() * 1.5 + 0.5;
+      this.alpha = Math.random() * 0.3 + 0.1;
     }
-    window.addEventListener('resize', resize);
-    resize();
-
-    class Bubble {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = height + Math.random() * 100;
-        this.radius = Math.random() * 8 + 2;
-        this.speed = Math.random() * 1.5 + 0.5;
-        this.alpha = Math.random() * 0.3 + 0.1;
-      }
-      update() {
-        this.y -= this.speed;
-        if (this.y < -10) this.reset();
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(2, 132, 199, ${this.alpha})`;
-        ctx.fill();
-      }
+    update() {
+      this.y -= this.speed;
+      if (this.y < -10) this.reset();
     }
-
-    for (let i = 0; i < 35; i++) bubbles.push(new Bubble());
-
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      bubbles.forEach(b => { b.update(); b.draw(); });
-      requestAnimationFrame(animate);
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(2, 132, 199, ${this.alpha})`;
+      ctx.fill();
     }
-    animate();
+  }
 
-    // --- State Initialization ---
-    let currentUser = JSON.parse(localStorage.getItem('nu_aquatic_user') || 'null');
-    let cart = [];
-    let isCmsActive = false;
-    let selectedImageUrls = [];
+  for (let i = 0; i < 35; i++) bubbles.push(new Bubble());
 
-    let defaultProducts = [
-      { id: 1, title: 'ミシシッピアカミミガメ 識別キーホルダー', price: 600, desc: 'サークルで調査・識別された個体の甲羅パターンをあしらったアクリルキーホルダー。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23e0f2fe"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%230369a1" font-size="20" font-weight="bold">🐢 アクリルキーホルダー</text></svg>'] },
-      { id: 2, title: '水生生物調査 2025-2026 年次報告誌', price: 1000, desc: '境川遊水地公園および周辺水域での実地生態調査データをまとめたフルカラー報告冊子。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23dcfce7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2315803d" font-size="20" font-weight="bold">📖 年次報告誌</text></svg>'] },
-      { id: 3, title: 'サステナブル有機肥料試作 (500g)', price: 400, desc: '生態研究のプロセスで得られた有機資材を活用した循環型試作肥料。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23fef3c7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23b45309" font-size="20" font-weight="bold">🌱 有機培養肥料</text></svg>'] }
-    ];
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    bubbles.forEach(b => { b.update(); b.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
 
-    let products = JSON.parse(localStorage.getItem('nu_aquatic_products') || JSON.stringify(defaultProducts));
+  // --- State Initialization ---
+  let currentUser = JSON.parse(localStorage.getItem('nu_aquatic_user') || 'null');
+  let cart = [];
+  let isCmsActive = false;
+  let selectedImageUrls = [];
 
-    products.forEach(p => {
-      if (!p.images && p.img) {
-        p.images = [p.img];
-      }
-    });
+  let defaultProducts = [
+    { id: 1, title: 'ミシシッピアカミミガメ 識別キーホルダー', price: 600, desc: 'サークルで調査・識別された個体の甲羅パターンをあしらったアクリルキーホルダー。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23e0f2fe"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%230369a1" font-size="20" font-weight="bold">🐢 アクリルキーホルダー</text></svg>'] },
+    { id: 2, title: '水生生物調査 2025-2026 年次報告誌', price: 1000, desc: '境川遊水地公園および周辺水域での実地生態調査データをまとめたフルカラー報告冊子。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23dcfce7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2315803d" font-size="20" font-weight="bold">📖 年次報告誌</text></svg>'] },
+    { id: 3, title: 'サステナブル有機肥料試作 (500g)', price: 400, desc: '生態研究のプロセスで得られた有機資材を活用した循環型試作肥料。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23fef3c7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23b45309" font-size="20" font-weight="bold">🌱 有機培養肥料</text></svg>'] }
+  ];
 
-    let defaultNotices = [
-      {
-        id: 1,
-        dateStr: '2026/10/24',
-        dayOfWeek: '土曜日',
-        title: '【重要】次回・境川遊水地公園での秋期フィールド調査について',
-        content: '今週土曜日13:00〜 境川遊水地公園にて沈砂池調査を行います。胴長靴を忘れずにご持参ください。',
-        author: '代表'
-      },
-      {
-        id: 2,
-        dateStr: '2026/10/15',
-        dayOfWeek: '木曜日',
-        title: '学園祭出展に向けたオリジナルグッズ開発ミーティング',
-        content: '来週月曜の放課後、部室にてグッズの最終確認と価格設定の話し合いを行います。',
-        author: '副代表'
-      }
-    ];
+  let products = JSON.parse(localStorage.getItem('nu_aquatic_products') || JSON.stringify(defaultProducts));
+  products.forEach(p => { if (!p.images && p.img) p.images = [p.img]; });
 
-    let notices = JSON.parse(localStorage.getItem('nu_aquatic_notices') || JSON.stringify(defaultNotices));
+  let defaultNotices = [
+    { id: 1, dateStr: '2026/10/24', dayOfWeek: '土曜日', title: '【重要】次回・境川遊水地公園での秋期フィールド調査について', content: '今週土曜日13:00〜 境川遊水地公園にて沈砂池調査を行います。胴長靴を忘れずにご持参ください。', author: '代表' },
+    { id: 2, dateStr: '2026/10/15', dayOfWeek: '木曜日', title: '学園祭出展に向けたオリジナルグッズ開発ミーティング', content: '来週月曜の放課後、部室にてグッズの最終確認と価格設定の話し合いを行います。', author: '副代表' }
+  ];
+  let notices = JSON.parse(localStorage.getItem('nu_aquatic_notices') || JSON.stringify(defaultNotices));
 
-    // --- Google OAuth Callback Function ---
-    function parseJwt(token) {
-      try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-      } catch(e) {
-        return null;
-      }
+  // --- Google OAuth Callback Function ---
+  function parseJwt(token) {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function handleCredentialResponse(response) {
+    const payload = parseJwt(response.credential);
+    if (!payload) {
+      alert('Googleログイン処理中にエラーが発生しました。');
+      return;
     }
 
-    function handleCredentialResponse(response) {
-      const payload = parseJwt(response.credential);
-      if (!payload) {
-        alert('Googleログイン処理中にエラーが発生しました。');
-        return;
-      }
+    const email = payload.email || '';
+    const name = payload.name || 'Googleユーザー';
 
-      const email = payload.email || '';
-      const name = payload.name || 'Googleユーザー';
-
-      if (!email.endsWith('@g.nihon-u.ac.jp')) {
-        alert('エラー: 日本大学のアカウント (@g.nihon-u.ac.jp) のみログイン可能です。');
-        return;
-      }
-
-      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
-      let user = users.find(u => u.email === email);
-
-    function handleCredentialResponse(response) {
-      const payload = parseJwt(response.credential);
-      if (!payload) {
-        alert('Googleログイン処理中にエラーが発生しました。');
-        return;
-      }
-
-      const email = payload.email || '';
-      const name = payload.name || 'Googleユーザー';
-
-      if (!email.endsWith('@g.nihon-u.ac.jp')) {
-        alert('エラー: 日本大学のアカウント (@g.nihon-u.ac.jp) のみログイン可能です。');
-        return;
-      }
-
-      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
-      let user = users.find(u => u.email === email);
-      let isFirstLogin = false;
-
-      if (!user) {
-        isFirstLogin = true;
-        // 初回Googleログイン時の自動登録（各項目はマイページで初期設定）
-        user = {
-          name: name,
-          email: email,
-          role: '無所属',
-          grade: '1年',
-          dept: '未設定（マイページから入力してください）',
-          studentId: '未設定',
-          phone: '未設定',
-          pass: 'google-oauth-authenticated'
-        };
-        users.push(user);
-        localStorage.setItem('nu_aquatic_users', JSON.stringify(users));
-      }
-
-      currentUser = user;
-      localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
-
-      modalAuth.classList.remove('active');
-      updateAuthUI();
-
-      if (isFirstLogin) {
-        alert(`Welcome, ${name} 様！\n初回ログインが完了しました。マイページより学部学科、学籍番号、電話番号などの初期設定を行ってください。`);
-      } else {
-        alert(`ログイン成功: Welcome, ${name} 様！`);
-      }
-
-      openMypageModal();
-    }
-      currentUser = user;
-      localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
-
-      alert(`Google認証成功: Welcome, ${name} 様！`);
-      modalAuth.classList.remove('active');
-      updateAuthUI();
-      openMypageModal();
+    if (!email.endsWith('@g.nihon-u.ac.jp')) {
+      alert('エラー: 日本大学のアカウント (@g.nihon-u.ac.jp) のみログイン可能です。');
+      return;
     }
 
-    // --- DOM Elements & Auth System ---
+    let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+    let user = users.find(u => u.email === email);
+    let isFirstLogin = false;
+
+    if (!user) {
+      isFirstLogin = true;
+      user = {
+        name: name,
+        email: email,
+        role: '無所属',
+        grade: '1年',
+        dept: '未設定（編集から入力してください）',
+        studentId: '未設定',
+        phone: '未設定',
+        pass: 'google-oauth-authenticated'
+      };
+      users.push(user);
+      localStorage.setItem('nu_aquatic_users', JSON.stringify(users));
+    }
+
+    currentUser = user;
+    localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
+
     const modalAuth = document.getElementById('modal-auth');
-    const modalMypage = document.getElementById('modal-mypage');
-    const modalAllProducts = document.getElementById('modal-all-products');
-    const closeAuthModal = document.getElementById('close-auth-modal');
-    const closeMypageModal = document.getElementById('close-mypage-modal');
-    const closeAllProductsModal = document.getElementById('close-all-products-modal');
-    const tabLogin = document.getElementById('tab-login');
-    const tabRegister = document.getElementById('tab-register');
-    const formLogin = document.getElementById('form-login');
-    const formRegister = document.getElementById('form-register');
-    const userStatusContainer = document.getElementById('user-status-container');
-    const btnViewAllProducts = document.getElementById('btn-view-all-products');
-    const productSortSelect = document.getElementById('product-sort-select');
+    if (modalAuth) modalAuth.classList.remove('active');
+    
+    updateAuthUI();
 
-    function updateAuthUI() {
-      if (currentUser) {
-        userStatusContainer.innerHTML = `
-          <div class="user-profile-badge" id="btn-open-mypage" title="マイページを開く">
-            🎓 ${currentUser.name} [${currentUser.role || '無所属'}] 👤
-          </div>
-        `;
-      } else {
-        userStatusContainer.innerHTML = `<button class="btn-action" id="btn-login-modal">🔑 ログイン</button>`;
-      }
+    if (isFirstLogin) {
+      alert(`Welcome, ${name} 様！\n初回ログインが完了しました。マイページより学部学科・電話番号などの初期設定を行ってください。`);
     }
 
-    document.addEventListener('click', (e) => {
-      const target = e.target.closest('#btn-login-modal, #btn-open-mypage');
-      if (!target) return;
+    // 確実にマイページモーダルを起動
+    setTimeout(() => {
+      openMypageModal();
+    }, 100);
+  }
 
-      if (target.id === 'btn-login-modal') {
-        if (currentUser) {
-          openMypageModal();
-        } else {
-          modalAuth.classList.add('active');
-        }
-      } else if (target.id === 'btn-open-mypage') {
+  // --- DOM Elements & Auth System ---
+  const modalAuth = document.getElementById('modal-auth');
+  const modalMypage = document.getElementById('modal-mypage');
+  const modalAllProducts = document.getElementById('modal-all-products');
+  const closeAuthModal = document.getElementById('close-auth-modal');
+  const closeMypageModal = document.getElementById('close-mypage-modal');
+  const closeAllProductsModal = document.getElementById('close-all-products-modal');
+  const userStatusContainer = document.getElementById('user-status-container');
+  const btnViewAllProducts = document.getElementById('btn-view-all-products');
+  const productSortSelect = document.getElementById('product-sort-select');
+
+  function updateAuthUI() {
+    if (currentUser) {
+      userStatusContainer.innerHTML = `
+        <div class="user-profile-badge" id="btn-open-mypage" title="マイページを開く">
+          🎓 ${currentUser.name} [${currentUser.role || '無所属'}] 👤
+        </div>
+      `;
+    } else {
+      userStatusContainer.innerHTML = `<button class="btn-action" id="btn-login-modal">🔑 ログイン</button>`;
+    }
+  }
+
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('#btn-login-modal, #btn-open-mypage');
+    if (!target) return;
+
+    if (target.id === 'btn-login-modal') {
+      if (currentUser) {
         openMypageModal();
+      } else {
+        if (modalAuth) modalAuth.classList.add('active');
       }
-    });
+    } else if (target.id === 'btn-open-mypage') {
+      openMypageModal();
+    }
+  });
 
-    closeAuthModal.addEventListener('click', () => modalAuth.classList.remove('active'));
-    closeMypageModal.addEventListener('click', () => modalMypage.classList.remove('active'));
+  if (closeAuthModal) closeAuthModal.addEventListener('click', () => modalAuth.classList.remove('active'));
+  if (closeMypageModal) closeMypageModal.addEventListener('click', () => modalMypage.classList.remove('active'));
 
+  if (btnViewAllProducts) {
     btnViewAllProducts.addEventListener('click', () => {
       renderModalProducts();
-      modalAllProducts.classList.add('active');
+      if (modalAllProducts) modalAllProducts.classList.add('active');
     });
-    closeAllProductsModal.addEventListener('click', () => modalAllProducts.classList.remove('active'));
+  }
+  if (closeAllProductsModal) closeAllProductsModal.addEventListener('click', () => modalAllProducts.classList.remove('active'));
 
+  if (productSortSelect) {
     productSortSelect.addEventListener('change', () => {
       renderModalProducts();
     });
+  }
 
-    tabLogin.addEventListener('click', () => {
-      tabLogin.classList.add('active'); tabRegister.classList.remove('active');
-      formLogin.style.display = 'block'; formRegister.style.display = 'none';
-    });
+  // --- Mypage Modal System ---
+  const tabMypageProfile = document.getElementById('tab-mypage-profile');
+  const tabMypageMembers = document.getElementById('tab-mypage-members');
+  const tabMypageSell = document.getElementById('tab-mypage-sell');
+  const tabMypageNotice = document.getElementById('tab-mypage-notice');
 
-    tabRegister.addEventListener('click', () => {
-      tabRegister.classList.add('active'); tabLogin.classList.remove('active');
-      formRegister.style.display = 'block'; formLogin.style.display = 'none';
-    });
+  const secProfile = document.getElementById('mypage-sec-profile');
+  const secMembers = document.getElementById('mypage-sec-members');
+  const secSell = document.getElementById('mypage-sec-sell');
+  const secNotice = document.getElementById('mypage-sec-notice');
+  const adminCmsArea = document.getElementById('admin-cms-area');
+  const noticePostArea = document.getElementById('notice-post-area');
 
-    formRegister.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('reg-email').value.trim();
-      const role = document.getElementById('reg-role').value;
-
-      if (!email.endsWith('@g.nihon-u.ac.jp')) {
-        alert('エラー: 日本大学のアカウント (@g.nihon-u.ac.jp) のみ登録可能です。');
-        return;
-      }
-
-      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
-
-      if (role !== '無所属') {
-        const existingRoleUser = users.find(u => u.role === role);
-        if (existingRoleUser) {
-          alert(`⚠️ 警告: 「${role}」は既に登録されています (${existingRoleUser.name} 様)。「${role}」は1人のみ登録可能です。`);
-          return;
-        }
-      }
-
-      if (users.some(u => u.email === email)) {
-        alert('このメールアドレスは既に登録されています。');
-        return;
-      }
-
-      const user = {
-        name: document.getElementById('reg-name').value,
-        email: email,
-        role: role,
-        grade: document.getElementById('reg-grade').value,
-        dept: document.getElementById('reg-dept').value,
-        studentId: document.getElementById('reg-student-id').value,
-        phone: document.getElementById('reg-phone').value,
-        pass: document.getElementById('reg-pass').value
-      };
-
-      users.push(user);
-      localStorage.setItem('nu_aquatic_users', JSON.stringify(users));
-
-      currentUser = user;
-      localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
-
-      alert('登録が完了しました！マイページを開きます。');
-      modalAuth.classList.remove('active');
-      updateAuthUI();
-      openMypageModal();
-    });
-
-    formLogin.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const pass = document.getElementById('login-pass').value;
-
-      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
-      const found = users.find(u => u.email === email && u.pass === pass);
-
-      if (found) {
-        currentUser = found;
-        localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
-        modalAuth.classList.remove('active');
-        updateAuthUI();
-        openMypageModal();
-      } else {
-        alert('メールアドレスまたはパスワードが正しくありません。');
-      }
-    });
-
-    // --- Mypage Modal System ---
-    const tabMypageProfile = document.getElementById('tab-mypage-profile');
-    const tabMypageMembers = document.getElementById('tab-mypage-members');
-    const tabMypageSell = document.getElementById('tab-mypage-sell');
-    const tabMypageNotice = document.getElementById('tab-mypage-notice');
-
-    const secProfile = document.getElementById('mypage-sec-profile');
-    const secMembers = document.getElementById('mypage-sec-members');
-    const secSell = document.getElementById('mypage-sec-sell');
-    const secNotice = document.getElementById('mypage-sec-notice');
-    const adminCmsArea = document.getElementById('admin-cms-area');
-    const noticePostArea = document.getElementById('notice-post-area');
-
-    function openMypageModal() {
-      if (!currentUser) return;
-      document.getElementById('mypage-welcome-msg').textContent = `${currentUser.email} (${currentUser.role || '無所属'})`;
-      document.getElementById('mypage-name').value = currentUser.name || '';
-      document.getElementById('mypage-role').value = currentUser.role || '無所属';
-      document.getElementById('mypage-grade').value = currentUser.grade || '1年';
-      document.getElementById('mypage-dept').value = currentUser.dept || '';
-      document.getElementById('mypage-phone').value = currentUser.phone || '';
-      
+  function openMypageModal() {
+    if (!currentUser) return;
+    const welcomeMsg = document.getElementById('mypage-welcome-msg');
+    if (welcomeMsg) welcomeMsg.textContent = `${currentUser.email} (${currentUser.role || '無所属'})`;
+    
+    if (document.getElementById('mypage-name')) document.getElementById('mypage-name').value = currentUser.name || '';
+    if (document.getElementById('mypage-role')) document.getElementById('mypage-role').value = currentUser.role || '無所属';
+    if (document.getElementById('mypage-grade')) document.getElementById('mypage-grade').value = currentUser.grade || '1年';
+    if (document.getElementById('mypage-dept')) document.getElementById('mypage-dept').value = currentUser.dept || '';
+    if (document.getElementById('mypage-phone')) document.getElementById('mypage-phone').value = currentUser.phone || '';
+    
+    if (adminCmsArea) {
       if (currentUser.role === '代表' || currentUser.role === '副代表') {
         adminCmsArea.style.display = 'block';
       } else {
         adminCmsArea.style.display = 'none';
       }
+    }
 
+    if (noticePostArea) {
       if (['代表', '副代表', '会計'].includes(currentUser.role)) {
         noticePostArea.style.display = 'block';
       } else {
         noticePostArea.style.display = 'none';
       }
-
-      renderMemberList();
-      renderNoticeList();
-      modalMypage.classList.add('active');
     }
 
-    function renderMemberList() {
-      const tbody = document.getElementById('member-list-body');
-      tbody.innerHTML = '';
-      const users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+    renderMemberList();
+    renderNoticeList();
+    if (modalMypage) modalMypage.classList.add('active');
+  }
 
-      if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">登録されたメンバーはいません。</td></tr>';
-        return;
-      }
+  function renderMemberList() {
+    const tbody = document.getElementById('member-list-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    const users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
 
-      users.forEach(u => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${u.name || '未設定'}</strong></td>
-          <td><span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:0.75rem;">${u.role || '無所属'}</span></td>
-          <td>${u.grade || '-'}</td>
-          <td>${u.dept || '-'}</td>
-          <td style="word-break:break-all;">${u.email || '-'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+    if (users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">登録されたメンバーはいません。</td></tr>';
+      return;
     }
 
-    function renderNoticeList() {
-      const container = document.getElementById('notice-list-container');
-      container.innerHTML = '';
+    users.forEach(u => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${u.name || '未設定'}</strong></td>
+        <td><span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:0.75rem;">${u.role || '無所属'}</span></td>
+        <td>${u.grade || '-'}</td>
+        <td>${u.dept || '-'}</td>
+        <td style="word-break:break-all;">${u.email || '-'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
 
-      if (notices.length === 0) {
-        container.innerHTML = '<p style="text-align:center; padding:1.5rem; color:var(--text-muted);">サークル連絡はありません。</p>';
-        return;
-      }
+  function renderNoticeList() {
+    const container = document.getElementById('notice-list-container');
+    if (!container) return;
+    container.innerHTML = '';
 
-      notices.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'notice-item';
-        div.innerHTML = `
-          <div class="notice-date">📅 ${item.dateStr} (${item.dayOfWeek}) <span class="notice-author">✍️ 投稿者: ${item.author || '役職者'}</span></div>
-          <div class="notice-title">${item.title}</div>
-          <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem; white-space:pre-wrap;">${item.content}</p>
-        `;
-        container.appendChild(div);
-      });
+    if (notices.length === 0) {
+      container.innerHTML = '<p style="text-align:center; padding:1.5rem; color:var(--text-muted);">サークル連絡はありません。</p>';
+      return;
     }
 
-    document.getElementById('form-add-notice').addEventListener('submit', (e) => {
+    notices.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'notice-item';
+      div.innerHTML = `
+        <div class="notice-date">📅 ${item.dateStr} (${item.dayOfWeek}) <span class="notice-author">✍️ 投稿者: ${item.author || '役職者'}</span></div>
+        <div class="notice-title">${item.title}</div>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem; white-space:pre-wrap;">${item.content}</p>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  const formAddNotice = document.getElementById('form-add-notice');
+  if (formAddNotice) {
+    formAddNotice.addEventListener('submit', (e) => {
       e.preventDefault();
       if (!currentUser || !['代表', '副代表', '会計'].includes(currentUser.role)) {
         alert('エラー: サークル連絡を投稿できるのは代表・副代表・会計のみです。');
@@ -1521,41 +1408,52 @@
 
       renderNoticeList();
       alert('サークル連絡を投稿しました！');
-      document.getElementById('form-add-notice').reset();
+      formAddNotice.reset();
     });
+  }
 
-    function resetMypageTabs() {
-      [tabMypageProfile, tabMypageMembers, tabMypageSell, tabMypageNotice].forEach(t => t.classList.remove('active'));
-      [secProfile, secMembers, secSell, secNotice].forEach(s => s.style.display = 'none');
-    }
+  function resetMypageTabs() {
+    [tabMypageProfile, tabMypageMembers, tabMypageSell, tabMypageNotice].forEach(t => { if(t) t.classList.remove('active'); });
+    [secProfile, secMembers, secSell, secNotice].forEach(s => { if(s) s.style.display = 'none'; });
+  }
 
+  if (tabMypageProfile) {
     tabMypageProfile.addEventListener('click', () => {
       resetMypageTabs();
       tabMypageProfile.classList.add('active');
-      secProfile.style.display = 'block';
+      if (secProfile) secProfile.style.display = 'block';
     });
+  }
 
+  if (tabMypageMembers) {
     tabMypageMembers.addEventListener('click', () => {
       resetMypageTabs();
       tabMypageMembers.classList.add('active');
-      secMembers.style.display = 'block';
+      if (secMembers) secMembers.style.display = 'block';
       renderMemberList();
     });
+  }
 
+  if (tabMypageSell) {
     tabMypageSell.addEventListener('click', () => {
       resetMypageTabs();
       tabMypageSell.classList.add('active');
-      secSell.style.display = 'block';
+      if (secSell) secSell.style.display = 'block';
     });
+  }
 
+  if (tabMypageNotice) {
     tabMypageNotice.addEventListener('click', () => {
       resetMypageTabs();
       tabMypageNotice.classList.add('active');
-      secNotice.style.display = 'block';
+      if (secNotice) secNotice.style.display = 'block';
       renderNoticeList();
     });
+  }
 
-    document.getElementById('form-update-profile').addEventListener('submit', (e) => {
+  const formUpdateProfile = document.getElementById('form-update-profile');
+  if (formUpdateProfile) {
+    formUpdateProfile.addEventListener('submit', (e) => {
       e.preventDefault();
       if (!currentUser) return;
 
@@ -1588,10 +1486,12 @@
       updateAuthUI();
       openMypageModal();
     });
+  }
 
-    const sellImagesInput = document.getElementById('sell-images');
-    const sellImgPreviewGrid = document.getElementById('sell-img-preview-grid');
+  const sellImagesInput = document.getElementById('sell-images');
+  const sellImgPreviewGrid = document.getElementById('sell-img-preview-grid');
 
+  if (sellImagesInput) {
     sellImagesInput.addEventListener('change', (e) => {
       const files = Array.from(e.target.files);
       if (files.length === 0) return;
@@ -1619,33 +1519,36 @@
 
       sellImagesInput.value = '';
     });
+  }
 
-    function renderImagePreviews() {
-      sellImgPreviewGrid.innerHTML = '';
-      selectedImageUrls.forEach((url, idx) => {
-        const div = document.createElement('div');
-        div.className = 'img-preview-item';
-        div.innerHTML = `
-          <img src="${url}" alt="プレビュー ${idx + 1}">
-          <button type="button" class="remove-img-btn" onclick="removeSelectedImage(${idx})">✕</button>
-        `;
-        sellImgPreviewGrid.appendChild(div);
-      });
-    }
+  function renderImagePreviews() {
+    if (!sellImgPreviewGrid) return;
+    sellImgPreviewGrid.innerHTML = '';
+    selectedImageUrls.forEach((url, idx) => {
+      const div = document.createElement('div');
+      div.className = 'img-preview-item';
+      div.innerHTML = `
+        <img src="${url}" alt="プレビュー ${idx + 1}">
+        <button type="button" class="remove-img-btn" onclick="removeSelectedImage(${idx})">✕</button>
+      `;
+      sellImgPreviewGrid.appendChild(div);
+    });
+  }
 
-    window.removeSelectedImage = function(index) {
-      selectedImageUrls.splice(index, 1);
-      renderImagePreviews();
-    };
+  window.removeSelectedImage = function(index) {
+    selectedImageUrls.splice(index, 1);
+    renderImagePreviews();
+  };
 
-    document.getElementById('form-sell-product').addEventListener('submit', (e) => {
+  const formSellProduct = document.getElementById('form-sell-product');
+  if (formSellProduct) {
+    formSellProduct.addEventListener('submit', (e) => {
       e.preventDefault();
       const title = document.getElementById('sell-title').value.trim();
       const price = parseInt(document.getElementById('sell-price').value);
       const desc = document.getElementById('sell-desc').value.trim();
 
       const defaultImg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23e0f2fe"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%230284c7" font-size="18" font-weight="bold">📦 出品商品</text></svg>';
-
       const finalImages = selectedImageUrls.length > 0 ? [...selectedImageUrls] : [defaultImg];
 
       const newProd = {
@@ -1659,145 +1562,152 @@
       products.push(newProd);
       localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
       renderProducts();
-      if (modalAllProducts.classList.contains('active')) {
+      if (modalAllProducts && modalAllProducts.classList.contains('active')) {
         renderModalProducts();
       }
 
       alert(`商品（画像 ${finalImages.length} 枚）を出品公開しました！`);
-      document.getElementById('form-sell-product').reset();
+      formSellProduct.reset();
       selectedImageUrls = [];
-      sellImgPreviewGrid.innerHTML = '';
-      modalMypage.classList.remove('active');
+      if (sellImgPreviewGrid) sellImgPreviewGrid.innerHTML = '';
+      if (modalMypage) modalMypage.classList.remove('active');
+    });
+  }
+
+  window.logout = function() {
+    currentUser = null;
+    localStorage.removeItem('nu_aquatic_user');
+
+    if (isCmsActive) {
+      isCmsActive = false;
+      document.body.classList.remove('cms-active');
+      const cmsControls = document.getElementById('cms-controls');
+      if (cmsControls) cmsControls.classList.remove('active');
+      const btnAddProduct = document.getElementById('btn-add-product');
+      if (btnAddProduct) btnAddProduct.style.display = 'none';
+      disableContentEditable();
+    }
+
+    if (modalMypage) modalMypage.classList.remove('active');
+    updateAuthUI();
+    alert('ログアウトしました。');
+  };
+
+  window.resetAllData = function() {
+    if (confirm('登録されているすべてのユーザー情報およびWebサイトの編集データを完全に初期化しますか？')) {
+      localStorage.clear();
+      alert('データをすべて削除しました。リロードします。');
+      location.reload();
+    }
+  };
+
+  function createProductCardHTML(p) {
+    const imgs = p.images && p.images.length > 0 ? p.images : [p.img || ''];
+    const mainImgSrc = imgs[0];
+
+    let thumbsHtml = '';
+    if (imgs.length > 1) {
+      thumbsHtml = `<div class="product-thumbs">` + 
+        imgs.map((src, i) => `<img src="${src}" class="product-thumb ${i===0 ? 'active':''}" onclick="switchProductMainImage(${p.id}, ${i}, this)" alt="サムネイル">`).join('') +
+      `</div>`;
+    }
+
+    return `
+      <button class="delete-item-btn" onclick="deleteProduct(${p.id})">✕</button>
+      <div class="product-img-wrapper">
+        <img src="${mainImgSrc}" class="product-img" id="main-img-${p.id}" alt="${p.title}">
+      </div>
+      ${thumbsHtml}
+      <div class="product-body">
+        <div class="product-title ${isCmsActive ? 'editable-field' : ''}" id="prod-title-${p.id}">${p.title}</div>
+        <div class="product-desc ${isCmsActive ? 'editable-field' : ''}" id="prod-desc-${p.id}">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">¥<span class="${isCmsActive ? 'editable-field' : ''}" id="prod-price-${p.id}">${p.price}</span></div>
+          <button class="btn-add-cart" onclick="addToCart(${p.id})">カートに追加</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const productContainer = document.getElementById('product-container');
+  const modalProductContainer = document.getElementById('modal-product-container');
+  const allProductsCount = document.getElementById('all-products-count');
+
+  function renderProducts() {
+    if (!productContainer) return;
+    productContainer.innerHTML = '';
+    const displayProducts = products.slice(0, 4);
+
+    displayProducts.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = createProductCardHTML(p);
+      productContainer.appendChild(card);
     });
 
-    window.logout = function() {
-      currentUser = null;
-      localStorage.removeItem('nu_aquatic_user');
+    if (isCmsActive) enableContentEditable();
+  }
 
-      if (isCmsActive) {
-        isCmsActive = false;
-        document.body.classList.remove('cms-active');
-        document.getElementById('cms-controls').classList.remove('active');
-        btnAddProduct.style.display = 'none';
-        disableContentEditable();
-      }
+  function renderModalProducts() {
+    if (!modalProductContainer) return;
+    modalProductContainer.innerHTML = '';
+    if (allProductsCount) allProductsCount.textContent = `全 ${products.length} 件`;
 
-      modalMypage.classList.remove('active');
-      updateAuthUI();
-      alert('ログアウトしました。');
-    };
+    let sortedProducts = [...products];
+    const sortValue = productSortSelect ? productSortSelect.value : 'newest';
 
-    window.resetAllData = function() {
-      if (confirm('登録されているすべてのユーザー情報およびWebサイトの編集データを完全に初期化しますか？')) {
-        localStorage.clear();
-        alert('データをすべて削除しました。リロードします。');
-        location.reload();
-      }
-    };
-
-    function createProductCardHTML(p) {
-      const imgs = p.images && p.images.length > 0 ? p.images : [p.img || ''];
-      const mainImgSrc = imgs[0];
-
-      let thumbsHtml = '';
-      if (imgs.length > 1) {
-        thumbsHtml = `<div class="product-thumbs">` + 
-          imgs.map((src, i) => `<img src="${src}" class="product-thumb ${i===0 ? 'active':''}" onclick="switchProductMainImage(${p.id}, ${i}, this)" alt="サムネイル">`).join('') +
-        `</div>`;
-      }
-
-      return `
-        <button class="delete-item-btn" onclick="deleteProduct(${p.id})">✕</button>
-        <div class="product-img-wrapper">
-          <img src="${mainImgSrc}" class="product-img" id="main-img-${p.id}" alt="${p.title}">
-        </div>
-        ${thumbsHtml}
-        <div class="product-body">
-          <div class="product-title ${isCmsActive ? 'editable-field' : ''}" id="prod-title-${p.id}">${p.title}</div>
-          <div class="product-desc ${isCmsActive ? 'editable-field' : ''}" id="prod-desc-${p.id}">${p.desc}</div>
-          <div class="product-footer">
-            <div class="product-price">¥<span class="${isCmsActive ? 'editable-field' : ''}" id="prod-price-${p.id}">${p.price}</span></div>
-            <button class="btn-add-cart" onclick="addToCart(${p.id})">カートに追加</button>
-          </div>
-        </div>
-      `;
+    if (sortValue === 'newest') {
+      sortedProducts.reverse();
+    } else if (sortValue === 'price-asc') {
+      sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortValue === 'price-desc') {
+      sortedProducts.sort((a, b) => Number(b.price) - Number(a.price));
     }
 
-    const productContainer = document.getElementById('product-container');
-    const modalProductContainer = document.getElementById('modal-product-container');
-    const allProductsCount = document.getElementById('all-products-count');
+    sortedProducts.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = createProductCardHTML(p);
+      modalProductContainer.appendChild(card);
+    });
 
-    function renderProducts() {
-      productContainer.innerHTML = '';
-      const displayProducts = products.slice(0, 4);
+    if (isCmsActive) enableContentEditable();
+  }
 
-      displayProducts.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = createProductCardHTML(p);
-        productContainer.appendChild(card);
-      });
+  window.switchProductMainImage = function(productId, imgIndex, thumbEl) {
+    const prod = products.find(p => p.id === productId);
+    if (!prod) return;
+    const imgs = prod.images || [prod.img];
 
-      if (isCmsActive) enableContentEditable();
+    const parentCard = thumbEl.closest('.product-card');
+    if (parentCard) {
+      const mainImg = parentCard.querySelector('.product-img');
+      if (mainImg && imgs[imgIndex]) {
+        mainImg.src = imgs[imgIndex];
+      }
+      parentCard.querySelectorAll('.product-thumb').forEach(t => t.classList.remove('active'));
+      thumbEl.classList.add('active');
     }
+  };
 
-    function renderModalProducts() {
-      modalProductContainer.innerHTML = '';
-      allProductsCount.textContent = `全 ${products.length} 件`;
+  window.addToCart = function(id) {
+    const prod = products.find(p => p.id === id);
+    if (prod) cart.push(prod);
+    updateCartUI();
+  };
 
-      let sortedProducts = [...products];
-      const sortValue = productSortSelect.value;
-
-      if (sortValue === 'newest') {
-        sortedProducts.reverse();
-      } else if (sortValue === 'price-asc') {
-        sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
-      } else if (sortValue === 'price-desc') {
-        sortedProducts.sort((a, b) => Number(b.price) - Number(a.price));
-      }
-
-      sortedProducts.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = createProductCardHTML(p);
-        modalProductContainer.appendChild(card);
-      });
-
-      if (isCmsActive) enableContentEditable();
+  window.deleteProduct = function(id) {
+    products = products.filter(p => p.id !== id);
+    localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
+    renderProducts();
+    if (modalAllProducts && modalAllProducts.classList.contains('active')) {
+      renderModalProducts();
     }
+  };
 
-    window.switchProductMainImage = function(productId, imgIndex, thumbEl) {
-      const prod = products.find(p => p.id === productId);
-      if (!prod) return;
-      const imgs = prod.images || [prod.img];
-
-      const parentCard = thumbEl.closest('.product-card');
-      if (parentCard) {
-        const mainImg = parentCard.querySelector('.product-img');
-        if (mainImg && imgs[imgIndex]) {
-          mainImg.src = imgs[imgIndex];
-        }
-        parentCard.querySelectorAll('.product-thumb').forEach(t => t.classList.remove('active'));
-        thumbEl.classList.add('active');
-      }
-    };
-
-    window.addToCart = function(id) {
-      const prod = products.find(p => p.id === id);
-      cart.push(prod);
-      updateCartUI();
-    };
-
-    window.deleteProduct = function(id) {
-      products = products.filter(p => p.id !== id);
-      localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
-      renderProducts();
-      if (modalAllProducts.classList.contains('active')) {
-        renderModalProducts();
-      }
-    };
-
-    document.getElementById('btn-add-product').addEventListener('click', () => {
+  const btnAddProduct = document.getElementById('btn-add-product');
+  if (btnAddProduct) {
+    btnAddProduct.addEventListener('click', () => {
       const newProd = {
         id: Date.now(),
         title: '新オリジナル商品',
@@ -1808,54 +1718,57 @@
       products.push(newProd);
       localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
       renderProducts();
-      if (modalAllProducts.classList.contains('active')) {
+      if (modalAllProducts && modalAllProducts.classList.contains('active')) {
         renderModalProducts();
       }
     });
+  }
 
-    // --- Cart System ---
-    const cartDrawer = document.getElementById('cart-drawer');
-    const btnCartToggle = document.getElementById('btn-cart-toggle');
-    const closeCart = document.getElementById('close-cart');
-    const cartCount = document.getElementById('cart-count');
-    const cartItemsContainer = document.getElementById('cart-items-container');
-    const cartTotalPrice = document.getElementById('cart-total-price');
+  // --- Cart System ---
+  const cartDrawer = document.getElementById('cart-drawer');
+  const btnCartToggle = document.getElementById('btn-cart-toggle');
+  const closeCart = document.getElementById('close-cart');
+  const cartCount = document.getElementById('cart-count');
+  const cartItemsContainer = document.getElementById('cart-items-container');
+  const cartTotalPrice = document.getElementById('cart-total-price');
 
-    btnCartToggle.addEventListener('click', () => cartDrawer.classList.add('active'));
-    closeCart.addEventListener('click', () => cartDrawer.classList.remove('active'));
+  if (btnCartToggle) btnCartToggle.addEventListener('click', () => { if(cartDrawer) cartDrawer.classList.add('active'); });
+  if (closeCart) closeCart.addEventListener('click', () => { if(cartDrawer) cartDrawer.classList.remove('active'); });
 
-    function updateCartUI() {
-      cartCount.textContent = cart.length;
-      cartItemsContainer.innerHTML = '';
-      let total = 0;
+  function updateCartUI() {
+    if (cartCount) cartCount.textContent = cart.length;
+    if (!cartItemsContainer) return;
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
 
-      cart.forEach((item, index) => {
-        total += Number(item.price);
-        const div = document.createElement('div');
-        div.className = 'cart-item';
-        div.innerHTML = `
-          <div style="flex-grow:1;">
-            <div class="cart-item-title">${item.title}</div>
-            <div class="cart-item-price">¥${item.price}</div>
-          </div>
-          <button onclick="removeFromCart(${index})" style="border:none; background:none; cursor:pointer;">🗑️</button>
-        `;
-        cartItemsContainer.appendChild(div);
-      });
+    cart.forEach((item, index) => {
+      total += Number(item.price);
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <div style="flex-grow:1;">
+          <div class="cart-item-title">${item.title}</div>
+          <div class="cart-item-price">¥${item.price}</div>
+        </div>
+        <button onclick="removeFromCart(${index})" style="border:none; background:none; cursor:pointer;">🗑️</button>
+      `;
+      cartItemsContainer.appendChild(div);
+    });
 
-      cartTotalPrice.textContent = `¥${total}`;
-    }
+    if (cartTotalPrice) cartTotalPrice.textContent = `¥${total}`;
+  }
 
-    window.removeFromCart = function(index) {
-      cart.splice(index, 1);
-      updateCartUI();
-    };
+  window.removeFromCart = function(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+  };
 
-    // --- CMS Live Editor System ---
-    const cmsControls = document.getElementById('cms-controls');
-    const btnAddProduct = document.getElementById('btn-add-product');
+  // --- CMS Live Editor System ---
+  const cmsControls = document.getElementById('cms-controls');
+  const btnCmsToggle = document.getElementById('btn-cms-toggle-mypage');
 
-    document.getElementById('btn-cms-toggle-mypage').addEventListener('click', () => {
+  if (btnCmsToggle) {
+    btnCmsToggle.addEventListener('click', () => {
       if (!currentUser || (currentUser.role !== '代表' && currentUser.role !== '副代表')) {
         alert('🔒 サイトの編集権限があるのは代表および副代表のみです。');
         return;
@@ -1863,32 +1776,34 @@
 
       isCmsActive = !isCmsActive;
       document.body.classList.toggle('cms-active', isCmsActive);
-      cmsControls.classList.toggle('active', isCmsActive);
-      btnAddProduct.style.display = isCmsActive ? 'inline-flex' : 'none';
+      if (cmsControls) cmsControls.classList.toggle('active', isCmsActive);
+      if (btnAddProduct) btnAddProduct.style.display = isCmsActive ? 'inline-flex' : 'none';
 
-      const btnMypageCMS = document.getElementById('btn-cms-toggle-mypage');
       if (isCmsActive) {
-        btnMypageCMS.textContent = '❌ 編集モードを終了';
-        btnMypageCMS.style.background = 'var(--warning)';
+        btnCmsToggle.textContent = '❌ 編集モードを終了';
+        btnCmsToggle.style.background = 'var(--warning)';
         enableContentEditable();
       } else {
-        btnMypageCMS.textContent = '✏️ サイト編集モードを起動';
-        btnMypageCMS.style.background = '';
+        btnCmsToggle.textContent = '✏️ サイト編集モードを起動';
+        btnCmsToggle.style.background = '';
         disableContentEditable();
       }
 
-      modalMypage.classList.remove('active');
+      if (modalMypage) modalMypage.classList.remove('active');
     });
+  }
 
-    function enableContentEditable() {
-      document.querySelectorAll('.editable-field').forEach(el => el.setAttribute('contenteditable', 'true'));
-    }
+  function enableContentEditable() {
+    document.querySelectorAll('.editable-field').forEach(el => el.setAttribute('contenteditable', 'true'));
+  }
 
-    function disableContentEditable() {
-      document.querySelectorAll('.editable-field').forEach(el => el.removeAttribute('contenteditable'));
-    }
+  function disableContentEditable() {
+    document.querySelectorAll('.editable-field').forEach(el => el.removeAttribute('contenteditable'));
+  }
 
-    document.getElementById('btn-save-cms').addEventListener('click', () => {
+  const btnSaveCms = document.getElementById('btn-save-cms');
+  if (btnSaveCms) {
+    btnSaveCms.addEventListener('click', () => {
       if (!currentUser || (currentUser.role !== '代表' && currentUser.role !== '副代表')) return;
 
       document.querySelectorAll('.editable-field[id]').forEach(el => {
@@ -1909,8 +1824,11 @@
       localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
       alert('変更をブラウザに保存しました！');
     });
+  }
 
-    document.getElementById('btn-reset-cms').addEventListener('click', () => {
+  const btnResetCms = document.getElementById('btn-reset-cms');
+  if (btnResetCms) {
+    btnResetCms.addEventListener('click', () => {
       if (!currentUser || (currentUser.role !== '代表' && currentUser.role !== '副代表')) return;
 
       if (confirm('すべての編集内容を初期データに戻しますか？')) {
@@ -1922,18 +1840,19 @@
         location.reload();
       }
     });
+  }
 
-    function loadSavedCMSData() {
-      document.querySelectorAll('.editable-field[id]').forEach(el => {
-        const saved = localStorage.getItem('cms_' + el.id);
-        if (saved) el.innerHTML = saved;
-      });
-    }
+  function loadSavedCMSData() {
+    document.querySelectorAll('.editable-field[id]').forEach(el => {
+      const saved = localStorage.getItem('cms_' + el.id);
+      if (saved) el.innerHTML = saved;
+    });
+  }
 
-    // Init
-    updateAuthUI();
-    renderProducts();
-    loadSavedCMSData();
-  </script>
+  // Init
+  updateAuthUI();
+  renderProducts();
+  loadSavedCMSData();
+</script>
 </body>
 </html>
