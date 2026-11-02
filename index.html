@@ -1,1015 +1,1968 @@
 <!DOCTYPE html>
-<html lang="ja" class="scroll-smooth">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>水生動物研究会 | 日本大学生物資源科学部 準公認サークル</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts -->
+  <title>日本大学生物資源科学部 準公認サークル 水生動物研究会</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;800;900&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
   
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Noto Sans JP"', 'Inter', 'sans-serif'],
-            display: ['Outfit', '"Noto Sans JP"', 'sans-serif'],
-          },
-          colors: {
-            aqua: {
-              50: '#f0fdfa',
-              100: '#ccfbf1',
-              200: '#99f6e4',
-              300: '#5eead4',
-              400: '#2dd4bf',
-              500: '#14b8a6',
-              600: '#0d9488',
-              700: '#0f766e',
-              800: '#115e59',
-              900: '#134e4a',
-            },
-            deep: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0284c7',
-              600: '#0369a1',
-              700: '#075985',
-              800: '#0c4a6e',
-              900: '#0f172a',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Google Identity Services SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdf4 100%);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.9);
+      --glass-shadow: 0 20px 40px rgba(2, 132, 199, 0.08);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background-color: #f8fafc;
-      color: #0f172a;
+      font-family: 'Noto Sans JP', 'Outfit', sans-serif;
+      color: var(--text-main);
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      line-height: 1.7;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* 超洗練グラスモーフィズム & 光輪エフェクト */
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.95);
-      box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.08), 0 4px 6px -2px rgba(2, 132, 199, 0.02);
-    }
-
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(186, 230, 253, 0.5);
-    }
-
-    .glass-card-hover {
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .glass-card-hover:hover {
-      transform: translateY(-6px);
-      background: rgba(255, 255, 255, 0.98);
-      border-color: rgba(56, 189, 248, 0.5);
-      box-shadow: 0 20px 40px -10px rgba(2, 132, 199, 0.15), 0 0 25px rgba(56, 189, 248, 0.15);
-    }
-
-    /* ボタンデザイン */
-    .btn-gradient {
-      background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
-      color: #ffffff;
-      box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.35);
-      transition: all 0.3s ease;
-    }
-
-    .btn-gradient:hover {
-      background: linear-gradient(135deg, #0369a1 0%, #0f766e 100%);
-      box-shadow: 0 12px 25px -4px rgba(2, 132, 199, 0.5);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline-aqua {
-      background: rgba(255, 255, 255, 0.9);
-      color: #0284c7;
-      border: 1.5px solid rgba(2, 132, 199, 0.3);
-      transition: all 0.3s ease;
-    }
-
-    .btn-outline-aqua:hover {
-      background: #f0f9ff;
-      border-color: #0284c7;
-      transform: translateY(-2px);
-    }
-
-    #wave-canvas {
+    #bg-canvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       z-index: -1;
       pointer-events: none;
     }
 
-    .bg-grid {
-      background-size: 36px 36px;
-      background-image: 
-        linear-gradient(to right, rgba(2, 132, 199, 0.035) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(2, 132, 199, 0.035) 1px, transparent 1px);
+    /* Editable Outline Styling */
+    [contenteditable="true"] {
+      outline: 2px dashed var(--primary) !important;
+      outline-offset: 4px;
+      border-radius: 4px;
+      background-color: rgba(2, 132, 199, 0.05);
+      padding: 2px 4px;
     }
 
-    /* CMS編集用点線ハイライト */
-    .cms-editable-active {
-      outline: 2px dashed #0284c7 !important;
-      outline-offset: 4px;
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(2, 132, 199, 0.1);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .university-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .badge-sub {
+      background: #e0f2fe;
+      color: var(--primary-dark);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+    }
+
+    .logo-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+    }
+
+    nav { display: flex; align-items: center; gap: 1rem; }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.2rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+      background: rgba(2, 132, 199, 0.08);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .icon-btn {
+      position: relative;
+      background: white;
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      border-radius: 50%;
+      width: 42px; height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      transition: var(--transition);
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.15);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 800;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 0.55rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+      transition: var(--transition);
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
+    }
+
+    .btn-cms {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-cms.active {
+      background: var(--warning);
+      color: white;
+      border-color: var(--warning);
+    }
+
+    .cms-controls {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .cms-controls.active {
+      display: flex;
+    }
+
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(2, 132, 199, 0.1);
+      padding: 0.38rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(2, 132, 199, 0.2);
+    }
+
+    .user-profile-badge:hover {
+      background: rgba(2, 132, 199, 0.2);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3.5rem 2rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--glass-shadow);
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-hover);
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--glass-shadow);
+      padding: 2.2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      border-bottom: 2px solid rgba(2, 132, 199, 0.1);
+      padding-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      border: 1px solid rgba(2, 132, 199, 0.12);
+      transition: var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(2, 132, 199, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Store Component */
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* モーダルウィンドウ内の商品一覧：横5列表示 */
+    .store-grid-5cols {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.2rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(0,0,0,0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px rgba(2, 132, 199, 0.12);
+    }
+
+    .product-img-wrapper {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #f8fafc;
+      position: relative;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-thumbs {
+      display: flex;
+      gap: 4px;
+      padding: 6px;
+      background: #f1f5f9;
+      overflow-x: auto;
+    }
+
+    .product-thumb {
+      width: 44px;
+      height: 44px;
+      aspect-ratio: 1 / 1;
       border-radius: 6px;
-      background: rgba(224, 242, 254, 0.3);
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.7;
+      transition: var(--transition);
+    }
+
+    .product-thumb.active, .product-thumb:hover {
+      border-color: var(--primary);
+      opacity: 1;
+    }
+
+    .product-body {
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .product-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .product-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .product-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .btn-add-cart {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.9rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-add-cart:hover {
+      background: var(--accent-hover);
+    }
+
+    .delete-item-btn {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+      border: none;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .cms-active .delete-item-btn { display: flex; }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+
+    .modal-card.modal-large {
+      max-width: 1100px;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.2rem; right: 1.2rem;
+      background: #f1f5f9;
+      border: none;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .img-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+    }
+
+    .img-preview-item {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+    }
+
+    .img-preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .img-preview-item .remove-img-btn {
+      position: absolute;
+      top: 4px; right: 4px;
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+      border: none;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .tab-group {
+      display: flex;
+      gap: 0.3rem;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.5rem 0.4rem;
+      border: none;
+      background: transparent;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: var(--primary-dark);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    /* Google Auth Container Styling */
+    .google-auth-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .google-auth-box p {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .divider-or {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: bold;
+      margin: 1.2rem 0;
+    }
+
+    .divider-or::before, .divider-or::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    .divider-or:not(:empty)::before { margin-right: .5em; }
+    .divider-or:not(:empty)::after { margin-left: .5em; }
+
+    /* Cart Slideover */
+    .cart-drawer {
+      position: fixed;
+      top: 0; right: -400px;
+      width: 100%; max-width: 380px;
+      height: 100vh;
+      background: white;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+      z-index: 999;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+
+    .cart-drawer.active { right: 0; }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .cart-items {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 1rem 0;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cart-item-title { font-weight: 700; font-size: 0.88rem; }
+    .cart-item-price { font-size: 0.82rem; color: var(--primary-dark); font-weight: 700; }
+
+    .table-custom {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+
+    .table-custom th, .table-custom td {
+      padding: 0.75rem 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.85rem;
+    }
+
+    .table-custom th {
+      color: var(--primary-dark);
+      font-weight: 700;
+      background: rgba(2, 132, 199, 0.04);
+    }
+
+    .notice-item {
+      padding: 0.8rem 1rem;
+      background: #f8fafc;
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+    .notice-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: bold;
+    }
+    .notice-title {
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: var(--primary-dark);
+    }
+    .notice-author {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .store-grid-5cols { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.8rem; }
+      .nav-links { display: none; }
+      .table-custom { font-size: 0.78rem; }
+      .table-custom th, .table-custom td { padding: 0.5rem; }
+      .img-preview-grid { grid-template-columns: repeat(2, 1fr); }
+      .store-grid-5cols { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
-<body class="bg-grid relative antialiased font-sans text-slate-800">
+<body>
 
-  <!-- 動的アニメーション背景（Wave & Particles） -->
-  <canvas id="wave-canvas"></canvas>
+  <canvas id="bg-canvas"></canvas>
 
-  <!-- トースト通知 -->
-  <div id="toast-container" class="fixed bottom-6 right-6 z-[120] flex flex-col gap-2 pointer-events-none"></div>
-
-  <!-- ナビゲーションバー -->
-  <nav class="glass-nav fixed top-0 left-0 w-full z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-        
-        <!-- ロゴ＆サークル情報 -->
-        <a href="#" class="flex flex-col group">
-          <span class="text-[10px] sm:text-xs font-bold text-deep-600 tracking-wider uppercase flex items-center gap-1.5">
-            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            日本大学生物資源科学部 準公認サークル
-          </span>
-          <span class="text-xl sm:text-2xl font-black font-display tracking-tight text-slate-900 group-hover:text-deep-600 transition-colors">
-            水生動物研究会
-          </span>
-        </a>
-
-        <!-- デスクトップナビ -->
-        <div class="hidden md:flex items-center space-x-1 lg:space-x-3">
-          <a href="#about" class="px-3.5 py-2 text-sm font-bold text-slate-700 hover:text-deep-600 hover:bg-deep-50 rounded-full transition-all">サークル紹介</a>
-          <a href="#activities" class="px-3.5 py-2 text-sm font-bold text-slate-700 hover:text-deep-600 hover:bg-deep-50 rounded-full transition-all">主な活動内容</a>
-          <a href="#store" class="px-3.5 py-2 text-sm font-bold text-slate-700 hover:text-deep-600 hover:bg-deep-50 rounded-full transition-all flex items-center gap-1.5">
-            <i class="fa-solid fa-bag-shopping text-deep-500"></i> STORE
-          </a>
-          <a href="#schedule" class="px-3.5 py-2 text-sm font-bold text-slate-700 hover:text-deep-600 hover:bg-deep-50 rounded-full transition-all">活動概要</a>
-          
-          <!-- CMS編集モードトグル -->
-          <button id="toggle-edit-mode-btn" class="px-3.5 py-1.5 text-xs font-bold rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition-all flex items-center gap-1.5 shadow-sm">
-            <i class="fa-solid fa-pen-to-square text-deep-600"></i> サイト編集
-          </button>
-
-          <!-- カートボタン -->
-          <button id="open-cart-btn" class="relative p-2.5 text-deep-700 hover:text-deep-900 bg-deep-50 hover:bg-deep-100 rounded-full transition-all border border-deep-200 shadow-sm">
-            <i class="fa-solid fa-cart-shopping text-base"></i>
-            <span id="cart-badge" class="absolute -top-1 -right-1 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md transition-transform duration-300 scale-0 bg-amber-500">0</span>
-          </button>
-
-          <a href="#contact" class="px-4 py-2 text-xs font-bold rounded-full btn-gradient tracking-wider uppercase flex items-center gap-2">
-            <i class="fa-solid fa-paper-plane text-xs"></i> 入会案内
-          </a>
+  <header>
+    <div class="header-inner">
+      <div class="logo-group">
+        <div class="university-tag">
+          <span class="editable-field" id="univ-name">日本大学生物資源科学部</span>
+          <span class="badge-sub editable-field" id="sub-badge">準公認サークル</span>
         </div>
+        <div class="logo-title editable-field" id="circle-title">水生動物研究会</div>
+      </div>
 
-        <!-- モバイルナビボタン -->
-        <div class="md:hidden flex items-center gap-2">
-          <button id="open-cart-btn-mobile" class="relative p-2 text-deep-700 bg-deep-50 rounded-full border border-deep-200">
-            <i class="fa-solid fa-cart-shopping text-lg"></i>
-            <span id="cart-badge-mobile" class="absolute -top-1 -right-1 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center transition-transform scale-0 bg-amber-500">0</span>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#about">サークル概要</a></li>
+          <li><a href="#activities">活動内容</a></li>
+          <li><a href="#store">グッズ通販</a></li>
+          <li><a href="#schedule">活動情報</a></li>
+        </ul>
+
+        <div class="header-actions">
+          <div id="user-status-container">
+            <button class="btn-action" id="btn-login-modal">🔑 ログイン</button>
+          </div>
+
+          <button class="icon-btn" id="btn-cart-toggle" title="ショッピングカート">
+            🛒
+            <span class="cart-badge" id="cart-count">0</span>
           </button>
-          <button id="mobile-menu-btn" class="p-2 text-slate-700 hover:text-deep-600 rounded-lg">
-            <i class="fa-solid fa-bars-staggered text-2xl"></i>
-          </button>
+
+          <div class="cms-controls" id="cms-controls">
+            <button class="btn-action" style="background:#10b981; padding: 0.4rem 0.8rem; font-size: 0.78rem;" id="btn-save-cms">保存</button>
+            <button class="btn-action" style="background:#ef4444; padding: 0.4rem 0.8rem; font-size: 0.78rem;" id="btn-reset-cms">リセット</button>
+          </div>
         </div>
-      </div>
+      </nav>
     </div>
+  </header>
 
-    <!-- モバイルドロワー -->
-    <div id="mobile-menu" class="hidden md:hidden glass-nav border-b border-deep-100 px-4 pt-2 pb-6 space-y-2">
-      <a href="#about" class="block px-4 py-2.5 text-base font-semibold text-slate-700 hover:bg-deep-50 rounded-xl">サークル紹介</a>
-      <a href="#activities" class="block px-4 py-2.5 text-base font-semibold text-slate-700 hover:bg-deep-50 rounded-xl">主な活動内容</a>
-      <a href="#store" class="block px-4 py-2.5 text-base font-semibold text-slate-700 hover:bg-deep-50 rounded-xl flex items-center gap-2">
-        <i class="fa-solid fa-bag-shopping text-deep-500"></i> STORE（公式通販）
-      </a>
-      <a href="#schedule" class="block px-4 py-2.5 text-base font-semibold text-slate-700 hover:bg-deep-50 rounded-xl">活動概要</a>
-      <a href="#contact" class="block text-center mt-4 px-6 py-3 text-sm font-bold rounded-full btn-gradient">見学・入会受付</a>
-    </div>
-  </nav>
+  <main class="container">
+    <section class="hero">
+      <span class="hero-tag editable-field" id="hero-tag">🌟 新入部員＆ボランティア募集中</span>
+      <h1 class="editable-field" id="hero-title">身近な水辺から、<br>未来の環境生態系をつくる。</h1>
+      <p class="editable-field" id="hero-desc">私たちは境川や遊水地公園を中心に、水生生物の保全調査・個別識別研究や資源循環プロジェクトに取り組む学生研究サークルです。</p>
+    </section>
 
-  <!-- ヒーローセクション -->
-  <section class="relative min-h-[88vh] flex items-center justify-center pt-28 pb-16 px-4 sm:px-6">
-    <!-- 背景グラデーションオーラ -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[650px] h-[320px] sm:h-[650px] bg-gradient-to-tr from-sky-300/30 via-emerald-200/20 to-teal-200/40 rounded-full blur-3xl pointer-events-none"></div>
-
-    <div class="relative z-10 max-w-4xl mx-auto text-center space-y-8">
-      
-      <!-- バッジ -->
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-deep-200 text-xs sm:text-sm font-extrabold text-deep-700 shadow-sm backdrop-blur-md">
-        <i class="fa-solid fa-graduation-cap text-deep-500"></i>
-        <span>日本大学生物資源科学部 準公認サークル</span>
+    <section class="glass-card" id="about">
+      <div class="section-header">
+        <h2 class="section-title"><span>🐟</span> <span class="editable-field" id="about-title">サークル概要</span></h2>
       </div>
-
-      <!-- タイトル -->
-      <div class="space-y-4">
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight text-slate-900 leading-tight">
-          水生動物研究会
-        </h1>
-        <p class="text-lg sm:text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-deep-600 via-teal-600 to-emerald-600">
-          水生生物の未来を拓く、生態調査と循環型イノベーション
-        </p>
-      </div>
-
-      <!-- リード文 -->
-      <p class="max-w-2xl mx-auto text-base sm:text-lg text-slate-600 leading-relaxed font-medium">
-        境川や境川遊水地公園をはじめとする実地フィールドで生物調査や保全活動を展開。<br class="hidden sm:inline">
-        基礎研究から循環型農業への先端的な挑戦まで、次世代の水辺環境をひらく活動を行っています。
+      <p class="editable-field" id="about-content">
+        水生動物研究会は、日本大学生物資源科学部を拠点に活動する準公認サークルです。
+        近隣の境川遊水地公園での生物相調査やアカミミガメの識別調査を行いつつ、保護活動、展示会への出展、循環型農業へのアプローチを行なっています。
       </p>
+    </section>
 
-      <!-- CTAボタン -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-        <a href="#store" class="w-full sm:w-auto px-8 py-4 rounded-full btn-gradient text-sm font-bold tracking-wider flex items-center justify-center gap-2">
-          <i class="fa-solid fa-bag-shopping"></i> 公式ストア・制作物を見る
-        </a>
-        <a href="#activities" class="w-full sm:w-auto px-8 py-4 rounded-full btn-outline-aqua text-sm font-bold tracking-wider flex items-center justify-center gap-2">
-          <i class="fa-solid fa-compass"></i> 活動プロジェクトを見る
-        </a>
+    <section class="glass-card" id="activities">
+      <div class="section-header">
+        <h2 class="section-title"><span>🔬</span> <span class="editable-field" id="act-title">活動ラインナップ</span></h2>
       </div>
-
-      <!-- 実績・特長カード -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 max-w-2xl mx-auto text-left">
-        <div class="glass-panel p-4 rounded-2xl">
-          <div class="text-[11px] font-bold text-deep-500 uppercase tracking-wider">Field</div>
-          <div class="text-sm sm:text-base font-extrabold text-slate-800">境川遊水地公園</div>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🐢</div>
+          <h3 class="editable-field" id="act1-title">アカミミガメ識別調査</h3>
+          <p class="editable-field" id="act1-desc">甲羅のパターンや顔の模様から個別識別を行い、境川周辺での生息分布や行動パターンをデータ化・分析しています。</p>
         </div>
-        <div class="glass-panel p-4 rounded-2xl">
-          <div class="text-[11px] font-bold text-deep-500 uppercase tracking-wider">Research</div>
-          <div class="text-sm sm:text-base font-extrabold text-slate-800">個体識別 & 生物相調査</div>
+        <div class="feature-card">
+          <div class="feature-icon">🌿</div>
+          <h3 class="editable-field" id="act2-title">環境保全＆地域連携</h3>
+          <p class="editable-field" id="act2-desc">遊水地公園の沈砂池での生物採集調査や、卒業生のNPO・ボランティア団体と連携した水辺の美化・観察会を実施。</p>
         </div>
-        <div class="col-span-2 sm:col-span-1 glass-panel p-4 rounded-2xl">
-          <div class="text-[11px] font-bold text-deep-500 uppercase tracking-wider">Innovation</div>
-          <div class="text-sm sm:text-base font-extrabold text-slate-800">資源循環型農業</div>
+        <div class="feature-card">
+          <div class="feature-icon">♻️</div>
+          <h3 class="editable-field" id="act3-title">循環型農業へのアプローチ</h3>
+          <p class="editable-field" id="act3-desc">生態系維持の過程で生じる有機資源を活用した有機発酵肥料の開発等、未来型サステナブル農業の実験を行っています。</p>
         </div>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <section class="glass-card" id="store">
+      <div class="section-header">
+        <h2 class="section-title"><span>🛍️</span> <span class="editable-field" id="store-title">公式オンラインストア</span></h2>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+          <button class="btn-action" id="btn-view-all-products" style="background:var(--primary);">📦 すべて見る</button>
+          <button class="btn-action" id="btn-add-product" style="display:none;">＋ 商品を追加</button>
+        </div>
+      </div>
+      <!-- ホーム上には最大4個のみ表示 -->
+      <div class="store-grid" id="product-container">
+        <!-- Javascript renders main 4 products here -->
+      </div>
+    </section>
 
-  <!-- サークル紹介 -->
-  <section id="about" class="py-20 px-4 sm:px-6 relative">
-    <div class="max-w-5xl mx-auto space-y-12">
+    <section class="glass-card" id="schedule">
+      <div class="section-header">
+        <h2 class="section-title"><span>📅</span> <span class="editable-field" id="schedule-title">活動スケジュール＆詳細</span></h2>
+      </div>
+      <table class="table-custom">
+        <tr>
+          <th style="width:30%;">活動日時</th>
+          <td class="editable-field" id="sched-time">授業期間中：毎週土曜日 / 長期休暇：月・水・木・土 (13:00〜17:00)</td>
+        </tr>
+        <tr>
+          <th>主な活動拠点</th>
+          <td class="editable-field" id="sched-place">神奈川県藤沢市 境川遊水地公園、境川流域、大学内実験フィールド</td>
+        </tr>
+        <tr>
+          <th>対象メンバー</th>
+          <td class="editable-field" id="sched-target">日本大学 全学部生（生物資源科学部生歓迎、初心者OK）</td>
+        </tr>
+      </table>
+    </section>
+  </main>
+
+  <!-- 全商品閲覧・検索モーダルウィンドウ (横5列表示) -->
+  <div class="modal-overlay" id="modal-all-products">
+    <div class="modal-card modal-large">
+      <button class="modal-close" id="close-all-products-modal">✕</button>
+      <div style="margin-bottom:1.2rem; border-bottom: 2px solid rgba(2, 132, 199, 0.1); padding-bottom: 0.8rem;">
+        <h2 style="font-size:1.4rem; color:var(--primary-dark);">🛍️ 公式オンラインストア 全商品一覧</h2>
+      </div>
       
-      <div class="text-center space-y-2">
-        <span class="text-xs font-extrabold tracking-widest text-deep-600 uppercase">ABOUT US</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900">サークル紹介</h2>
-        <div class="w-16 h-1.5 bg-gradient-to-r from-deep-500 to-emerald-400 mx-auto rounded-full"></div>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-8 items-stretch">
-        <div class="glass-panel p-8 rounded-3xl space-y-6 flex flex-col justify-between">
-          <div class="space-y-4">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-deep-50 text-deep-700 text-xs font-bold">
-              <i class="fa-solid fa-droplet text-deep-500"></i> 日本大学生物資源科学部 準公認
-            </div>
-            <h3 class="text-2xl font-bold text-slate-900 leading-snug">
-              フィールドワークを通じ、<br>水辺の生物相と環境を守る。
-            </h3>
-            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-              私たち「水生動物研究会」は、日本大学生物資源科学部で身近な水生生物の観察・実地調査や環境保護活動を行っている準公認サークルです。
-            </p>
-            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-              生物が大好きなメンバーが集まり、安全対策を万全に講じながら、楽しみつつ水辺の多様な生態系について探求を深めています。
-            </p>
-          </div>
-        </div>
-
-        <div class="space-y-4">
-          <div class="glass-panel p-5 rounded-2xl glass-card-hover flex items-start gap-4">
-            <div class="p-3 bg-deep-500 text-white rounded-xl text-xl flex-shrink-0 shadow-md">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-900 text-base">実地調査・データ解析</h4>
-              <p class="text-xs sm:text-sm text-slate-600 mt-1">境川や遊水地公園での定期フィールドワークを実施し、アカミミガメの個体識別や生物相を詳しく調査。</p>
-            </div>
-          </div>
-
-          <div class="glass-panel p-5 rounded-2xl glass-card-hover flex items-start gap-4">
-            <div class="p-3 bg-teal-500 text-white rounded-xl text-xl flex-shrink-0 shadow-md">
-              <i class="fa-solid fa-handshake-angle"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-900 text-base">保護・ボランティア連携</h4>
-              <p class="text-xs sm:text-sm text-slate-600 mt-1">卒業生のボランティア団体と密に協働。オリジナルグッズ制作やSNS・ブログ発信により啓発活動を展開。</p>
-            </div>
-          </div>
-
-          <div class="glass-panel p-5 rounded-2xl glass-card-hover flex items-start gap-4">
-            <div class="p-3 bg-emerald-500 text-white rounded-xl text-xl flex-shrink-0 shadow-md">
-              <i class="fa-solid fa-seedling"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-900 text-base">持続可能な未来へのイノベーション</h4>
-              <p class="text-xs sm:text-sm text-slate-600 mt-1">保護カメの発酵糞尿を利用した肥料による「資源循環型農業」を目指した最新プロジェクトに邁進。</p>
-            </div>
-          </div>
+      <!-- 検索・ソート機能コントロール -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; background:#f8fafc; padding:0.8rem 1rem; border-radius:12px; flex-wrap:wrap; gap:0.8rem;">
+        <div style="font-size:0.88rem; font-weight:700; color:var(--text-muted);" id="all-products-count">全 0 件</div>
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <label style="font-size:0.85rem; font-weight:bold; color:var(--text-muted);">並び替え:</label>
+          <select class="form-control" id="product-sort-select" style="width:auto; padding:0.4rem 0.8rem;">
+            <option value="newest">新着順</option>
+            <option value="price-asc">価格の安い順</option>
+            <option value="price-desc">価格の高い順</option>
+          </select>
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <!-- 主な活動内容 -->
-  <section id="activities" class="py-20 px-4 sm:px-6 relative">
-    <div class="max-w-6xl mx-auto space-y-12">
-      
-      <div class="text-center space-y-2">
-        <span class="text-xs font-extrabold tracking-widest text-deep-600 uppercase">OUR PROJECTS</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900">主な活動内容</h2>
-        <div class="w-16 h-1.5 bg-gradient-to-r from-deep-500 to-emerald-400 mx-auto rounded-full"></div>
+      <div class="store-grid-5cols" id="modal-product-container">
+        <!-- Javascript renders all products here -->
       </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <div class="glass-panel p-6 rounded-3xl glass-card-hover space-y-4 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-deep-100 text-deep-600 flex items-center justify-center text-2xl font-bold mb-4">
-              🐢
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">アカミミガメ識別調査</h3>
-            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              境川および境川遊水地公園にて、捕獲したアカミミガメの甲羅の模様や顔の個性的特徴を撮影・記録。個体識別を通じて移動範囲や生息密度の実態を解明しています。
-            </p>
-          </div>
-          <span class="inline-block text-[11px] font-bold text-deep-600 bg-deep-50 px-3 py-1 rounded-full w-fit">フィールドワーク</span>
-        </div>
-
-        <div class="glass-panel p-6 rounded-3xl glass-card-hover space-y-4 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl font-bold mb-4">
-              🔬
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">沈砂池の生物生息調査</h3>
-            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              遊水地公園内の「沈砂池」を中心に、魚類・水生昆虫・底生生物のモニタリングを実施。河川環境の変化や多様な生命の生息バランスを定期調査しています。
-            </p>
-          </div>
-          <span class="inline-block text-[11px] font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full w-fit">環境モニタリング</span>
-        </div>
-
-        <div class="glass-panel p-6 rounded-3xl glass-card-hover space-y-4 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center text-2xl font-bold mb-4">
-              🤝
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">保護・ボランティア連携</h3>
-            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              卒業生が立ち上げたカメ保護ボランティア団体と強力タッグ。啓発イベントの開催やオリジナルグッズの企画・制作、SNS発信により外来種問題を広く周知。
-            </p>
-          </div>
-          <span class="inline-block text-[11px] font-bold text-teal-600 bg-teal-50 px-3 py-1 rounded-full w-fit">地域コミュ二ティ</span>
-        </div>
-
-        <div class="glass-panel p-6 rounded-3xl glass-card-hover space-y-4 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl font-bold mb-4">
-              🌱
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">資源循環型農業の推進</h3>
-            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              保護されたカメのフンを有用微生物で安全に発酵。栄養豊富な高品質有機肥料を作り出し、農作物に還元するサステナブルな「循環モデル」を研究開発中です。
-            </p>
-          </div>
-          <span class="inline-block text-[11px] font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full w-fit">先端的イノベーション</span>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- STORE セクション -->
-  <section id="store" class="py-20 px-4 sm:px-6 relative">
-    <div class="max-w-6xl mx-auto space-y-10">
-      
-      <div class="text-center space-y-2">
-        <span class="text-xs font-extrabold tracking-widest text-deep-600 uppercase">OFFICIAL ONLINE STORE</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900">サークル制作物 & グッズ</h2>
-        <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
-          水生動物研究会が企画・制作したオリジナルグッズや調査活動報告誌を販売しています。<br>売上は保護活動・調査研究資金として活用されます。
-        </p>
-        <div class="w-16 h-1.5 bg-gradient-to-r from-deep-500 to-emerald-400 mx-auto rounded-full mt-2"></div>
-      </div>
-
-      <!-- カテゴリフィルター & 編集アクション -->
-      <div class="flex justify-between items-center flex-wrap gap-4">
-        <div class="flex justify-center flex-wrap gap-2">
-          <button class="store-tab active px-5 py-2 rounded-full text-xs font-bold transition-all bg-deep-600 text-white shadow-md" data-category="all">すべて</button>
-          <button class="store-tab px-5 py-2 rounded-full text-xs font-bold transition-all bg-white text-slate-700 hover:bg-deep-50 border border-deep-100" data-category="goods">オリジナルグッズ</button>
-          <button class="store-tab px-5 py-2 rounded-full text-xs font-bold transition-all bg-white text-slate-700 hover:bg-deep-50 border border-deep-100" data-category="book">研究誌・作品</button>
-          <button class="store-tab px-5 py-2 rounded-full text-xs font-bold transition-all bg-white text-slate-700 hover:bg-deep-50 border border-deep-100" data-category="agro">農業・循環プロジェクト</button>
-        </div>
-
-        <button id="add-product-cms-btn" class="hidden px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-full shadow-lg transition-all flex items-center gap-2">
-          <i class="fa-solid fa-plus"></i> 新しい商品を追加
-        </button>
-      </div>
-
-      <!-- 商品グリッド -->
-      <div id="product-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- JS動的描画 -->
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 活動概要 -->
-  <section id="schedule" class="py-20 px-4 sm:px-6 relative">
-    <div class="max-w-5xl mx-auto space-y-10">
-      
-      <div class="text-center space-y-2">
-        <span class="text-xs font-extrabold tracking-widest text-deep-600 uppercase">SCHEDULE & OUTLINE</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900">活動概要・場所</h2>
-        <div class="w-16 h-1.5 bg-gradient-to-r from-deep-500 to-emerald-400 mx-auto rounded-full"></div>
-      </div>
-
-      <div class="glass-panel rounded-3xl p-6 sm:p-10 shadow-xl space-y-8">
-        <div class="grid md:grid-cols-2 gap-8">
-          
-          <div class="space-y-4">
-            <h3 class="text-lg font-bold text-slate-900 border-l-4 border-deep-500 pl-3 flex items-center gap-2">
-              <i class="fa-regular fa-clock text-deep-500"></i> 活動日時
-            </h3>
-            <div class="space-y-3 text-sm text-slate-600">
-              <div class="p-4 bg-white/80 rounded-2xl border border-deep-100">
-                <span class="font-bold text-slate-800 block mb-0.5">授業期間中</span>
-                毎週土曜日（フィールドワーク・学内ミーティング）
-              </div>
-              <div class="p-4 bg-white/80 rounded-2xl border border-deep-100">
-                <span class="font-bold text-slate-800 block mb-0.5">大学長期休暇期間（夏・春）</span>
-                月曜日・水曜日・木曜日・土曜日（13:00 〜 17:00）
-              </div>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <h3 class="text-lg font-bold text-slate-900 border-l-4 border-deep-500 pl-3 flex items-center gap-2">
-              <i class="fa-solid fa-location-dot text-deep-500"></i> 主な活動エリア
-            </h3>
-            <div class="space-y-3 text-sm text-slate-600">
-              <div class="p-4 bg-white/80 rounded-2xl border border-deep-100 flex items-start gap-3">
-                <i class="fa-solid fa-water text-deep-500 mt-1"></i>
-                <div>
-                  <span class="font-bold text-slate-800 block">境川遊水地公園・沈砂池</span>
-                  カメ個体識別および生息生物モニタリング調査
-                </div>
-              </div>
-              <div class="p-4 bg-white/80 rounded-2xl border border-deep-100 flex items-start gap-3">
-                <i class="fa-solid fa-wheat-awn text-emerald-500 mt-1"></i>
-                <div>
-                  <span class="font-bold text-slate-800 block">実験圃場・プロジェクト畑</span>
-                  カメの有機糞尿を利用した資源循環型農作物の栽培実証
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 入会案内 -->
-  <section id="contact" class="py-20 px-4 sm:px-6 relative">
-    <div class="max-w-4xl mx-auto text-center space-y-8">
-      
-      <div class="space-y-2">
-        <span class="text-xs font-extrabold tracking-widest text-deep-600 uppercase">JOIN US</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900">見学・入会希望の方へ</h2>
-        <div class="w-16 h-1.5 bg-gradient-to-r from-deep-500 to-emerald-400 mx-auto rounded-full"></div>
-      </div>
-
-      <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-        日本大学生物資源科学部の学生であれば、学年・学科問わずいつでも大歓迎です！<br>
-        生物好きな方はもちろん、フィールドワークや環境保全活動、農業イノベーションに興味のある方はお気軽に公式InstagramまでDMをお送りください。
-      </p>
-
-      <div class="glass-panel p-8 rounded-3xl max-w-md mx-auto space-y-4">
-        <div class="text-deep-600 text-3xl">
-          <i class="fa-brands fa-instagram"></i>
-        </div>
-        <h3 class="font-bold text-slate-900 text-lg">公式Instagramアカウント</h3>
-        <p class="text-xs text-slate-500">最新の活動写真や調査風景を定期投稿中！</p>
-        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="block py-3 px-6 rounded-full btn-gradient text-xs font-bold uppercase tracking-wider">
-          Instagramでダイレクトメッセージを送る
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- カートモーダル -->
-  <div id="cart-drawer" class="fixed inset-0 z-[100] pointer-events-none transition-opacity duration-300 opacity-0">
-    <div id="cart-backdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm pointer-events-auto"></div>
-    <div id="cart-content" class="absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl pointer-events-auto flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
-      
-      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-cart-shopping text-deep-600"></i>
-          <h3 class="font-bold text-slate-900 text-base">ショッピングカート</h3>
-        </div>
-        <button id="close-cart-btn" class="w-8 h-8 rounded-full bg-white text-slate-500 hover:text-slate-800 flex items-center justify-center border border-slate-200">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
-
-      <div class="p-5 border-t border-slate-100 bg-slate-50 space-y-4">
-        <div class="flex items-center justify-between text-sm">
-          <span class="text-slate-600 font-medium">合計金額（税込）</span>
-          <span id="cart-total-price" class="text-2xl font-black text-deep-700">¥0</span>
-        </div>
-        <button id="checkout-btn" disabled class="w-full py-3.5 rounded-xl btn-gradient font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-          <span>ご注文手続きへ進む</span>
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
-
     </div>
   </div>
 
-  <!-- 商品詳細モーダル -->
-  <div id="product-modal" class="fixed inset-0 z-[105] hidden flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-    <div class="glass-panel bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
-      <button id="close-product-modal" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div id="modal-product-content"></div>
-    </div>
-  </div>
-
-  <!-- チェックアウトモーダル -->
-  <div id="checkout-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="glass-panel bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
-      <button id="close-checkout-modal" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <div id="checkout-form-container" class="space-y-5">
-        <div class="border-b border-slate-100 pb-3">
-          <span class="text-xs font-bold text-deep-600">CHECKOUT</span>
-          <h3 class="text-xl font-bold text-slate-900">ご注文フォーム</h3>
+  <!-- Login/Register Modal -->
+  <div class="modal-overlay" id="modal-auth">
+    <div class="modal-card">
+      <button class="modal-close" id="close-auth-modal">✕</button>
+      
+      <!-- Google Auth Button Box -->
+      <div class="google-auth-box">
+        <p>🌐 日大Googleアカウント (@g.nihon-u.ac.jp) で簡単ログイン</p>
+        <div style="display: flex; justify-content: center;">
+          <!-- Google ログインボタン表示領域 -->
+         <div id="g_id_onload"
+ 　　　　　 data-client_id="123456789012-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com"
+ 　　　　　 data-callback="handleCredentialResponse">
+　　　　　</div>
+          <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large"></div>
         </div>
+      </div>
 
-        <form id="order-form" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">お名前 <span class="text-red-500">*</span></label>
-            <input type="text" required placeholder="日大 太郎" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-deep-500 bg-slate-50">
-          </div>
+      <div class="divider-or">または メールアドレスで手続き</div>
 
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">メールアドレス <span class="text-red-500">*</span></label>
-            <input type="email" required placeholder="aquatic@example.ac.jp" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-deep-500 bg-slate-50">
-          </div>
+      <div class="tab-group">
+        <button class="tab-btn active" id="tab-login">ログイン</button>
+        <button class="tab-btn" id="tab-register">新規アカウント登録</button>
+      </div>
 
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">受取方法 <span class="text-red-500">*</span></label>
-            <select id="delivery-type" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-deep-500 bg-slate-50">
-              <option value="campus">学内手渡し・藤桜祭（学園祭）受け取り (送料0円)</option>
-              <option value="mail">郵送（後日振込・送料別途200円）</option>
+      <!-- Login Form -->
+      <form id="form-login">
+        <div class="form-group">
+          <label>日大メールアドレス (@g.nihon-u.ac.jp)</label>
+          <input type="email" class="form-control" id="login-email" placeholder="example@g.nihon-u.ac.jp" required>
+        </div>
+        <div class="form-group">
+          <label>パスワード</label>
+          <input type="password" class="form-control" id="login-pass" required>
+        </div>
+        <button type="submit" class="btn-action" style="width:100%; margin-top:1rem; justify-content:center;">ログイン</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="form-register" style="display:none;">
+        <div class="form-group">
+          <label>氏名</label>
+          <input type="text" class="form-control" id="reg-name" placeholder="日大 太郎" required>
+        </div>
+        <div class="form-group">
+          <label>日大メールアドレス (*@g.nihon-u.ac.jp のみ可)</label>
+          <input type="email" class="form-control" id="reg-email" placeholder="xxx12345@g.nihon-u.ac.jp" required>
+        </div>
+        <div class="form-group">
+          <label>役職</label>
+          <select class="form-control" id="reg-role">
+            <option value="無所属">無所属（一般部員）</option>
+            <option value="代表">代表</option>
+            <option value="副代表">副代表</option>
+            <option value="会計">会計</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <div class="form-group" style="flex:1;">
+            <label>学年</label>
+            <select class="form-control" id="reg-grade">
+              <option>1年</option><option>2年</option><option>3年</option><option>4年</option><option>大学院生</option>
             </select>
           </div>
-
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">備考（任意）</label>
-            <textarea rows="2" placeholder="メッセージやご希望日時など" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-deep-500 bg-slate-50"></textarea>
+          <div class="form-group" style="flex:2;">
+            <label>学部・学科</label>
+            <input type="text" class="form-control" id="reg-dept" placeholder="生物資源科学部 海洋生物学科" required>
           </div>
-
-          <div class="bg-deep-50 p-4 rounded-xl text-xs text-slate-600 space-y-1 border border-deep-100">
-            <div class="flex justify-between font-bold text-slate-800 text-sm">
-              <span>ご注文小計</span>
-              <span id="checkout-total-price">¥0</span>
-            </div>
-            <p class="text-[11px] text-slate-500">※ ご注文送信後、担当者より確認メールをお送りいたします。</p>
-          </div>
-
-          <button type="submit" class="w-full py-3.5 rounded-xl btn-gradient font-bold text-sm shadow-md">
-            注文を確定する
-          </button>
-        </form>
-      </div>
-
-      <div id="checkout-success" class="hidden text-center py-8 space-y-4">
-        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-3xl">
-          <i class="fa-solid fa-circle-check"></i>
         </div>
-        <h3 class="text-2xl font-bold text-slate-900">ご注文ありがとうございます！</h3>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          受付メールをお送りしました。<br>
-          水生動物研究会の活動への温かいご支援に心より感謝申し上げます！
-        </p>
-        <button id="close-success-btn" class="px-6 py-2.5 rounded-full bg-slate-900 text-white font-bold text-xs">
-          ストアに戻る
-        </button>
+        <div class="form-group">
+          <label>学籍番号</label>
+          <input type="text" class="form-control" id="reg-student-id" placeholder="例: A1234567" required>
+        </div>
+        <div class="form-group">
+          <label>電話番号</label>
+          <input type="tel" class="form-control" id="reg-phone" placeholder="090-0000-0000" required>
+        </div>
+        <div class="form-group">
+          <label>パスワードの設定</label>
+          <input type="password" class="form-control" id="reg-pass" placeholder="6文字以上" minlength="6" required>
+        </div>
+        <button type="submit" class="btn-action" style="width:100%; margin-top:1rem; justify-content:center;">新規登録してログイン</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mypage Modal -->
+  <div class="modal-overlay" id="modal-mypage">
+    <div class="modal-card">
+      <button class="modal-close" id="close-mypage-modal">✕</button>
+      
+      <div style="text-align:center; margin-bottom:1.2rem;">
+        <h2 style="font-size:1.4rem; color:var(--primary-dark);">👤 マイページ</h2>
+        <p style="font-size:0.85rem; color:var(--text-muted);" id="mypage-welcome-msg">会員限定管理パネル</p>
       </div>
 
+      <div class="tab-group">
+        <button class="tab-btn active" id="tab-mypage-profile">プロフィール設定</button>
+        <button class="tab-btn" id="tab-mypage-members">メンバー一覧</button>
+        <button class="tab-btn" id="tab-mypage-sell">商品出品</button>
+        <button class="tab-btn" id="tab-mypage-notice">サークル連絡</button>
+      </div>
+
+      <!-- Tab 1: Profile Settings -->
+      <div id="mypage-sec-profile">
+        <form id="form-update-profile">
+          <div class="form-group">
+            <label>氏名</label>
+            <input type="text" class="form-control" id="mypage-name" required>
+          </div>
+          <div class="form-group">
+            <label>役職</label>
+            <select class="form-control" id="mypage-role">
+              <option value="無所属">無所属（一般部員）</option>
+              <option value="代表">代表</option>
+              <option value="副代表">副代表</option>
+              <option value="会計">会計</option>
+            </select>
+          </div>
+          <div style="display:flex; gap:0.5rem;">
+            <div class="form-group" style="flex:1;">
+              <label>学年</label>
+              <select class="form-control" id="mypage-grade">
+                <option>1年</option><option>2年</option><option>3年</option><option>4年</option><option>大学院生</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:2;">
+              <label>学部・学科</label>
+              <input type="text" class="form-control" id="mypage-dept" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>電話番号</label>
+            <input type="tel" class="form-control" id="mypage-phone" required>
+          </div>
+          <button type="submit" class="btn-action" style="width:100%; margin-top:0.5rem; justify-content:center;">プロフィール変更を保存</button>
+        </form>
+
+        <!-- 代表・副代表専用 編集ボタン＆データ初期化ボタン領域 -->
+        <div id="admin-cms-area" style="display:none; margin-top:1rem; padding-top:1rem; border-top:1px dashed #cbd5e1;">
+          <button class="btn-action btn-cms" id="btn-cms-toggle-mypage" style="width:100%; justify-content:center; margin-bottom:0.5rem;">✏️ サイト編集モードを起動</button>
+          <button onclick="resetAllData()" class="btn-action" style="background:#ef4444; width:100%; justify-content:center; font-size:0.8rem;">⚠️ 登録アカウント・設定データの全消去</button>
+        </div>
+
+        <div style="margin-top:1.2rem; text-align:center; border-top:1px solid #e2e8f0; padding-top:1rem;">
+          <button onclick="logout()" class="btn-action" style="background:#ef4444; width:100%; justify-content:center;">🚪 ログアウト</button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Members List -->
+      <div id="mypage-sec-members" style="display:none;">
+        <div style="overflow-x:auto;">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>名前</th>
+                <th>役職</th>
+                <th>学年</th>
+                <th>学部・学科</th>
+                <th>メールアドレス</th>
+              </tr>
+            </thead>
+            <tbody id="member-list-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:1.2rem; text-align:center; border-top:1px solid #e2e8f0; padding-top:1rem;">
+          <button onclick="logout()" class="btn-action" style="background:#ef4444; width:100%; justify-content:center;">🚪 ログアウト</button>
+        </div>
+      </div>
+
+      <!-- Tab 3: Item Listing -->
+      <div id="mypage-sec-sell" style="display:none;">
+        <form id="form-sell-product">
+          <div class="form-group">
+            <label>商品名</label>
+            <input type="text" class="form-control" id="sell-title" placeholder="例: 手づくり水生カメステッカー" required>
+          </div>
+          <div class="form-group">
+            <label>販売価格 (円)</label>
+            <input type="number" class="form-control" id="sell-price" placeholder="500" min="1" required>
+          </div>
+          <div class="form-group">
+            <label>商品画像（最大4枚・正方形で表示されます）</label>
+            <input type="file" class="form-control" id="sell-images" accept="image/*" multiple>
+            <div class="img-preview-grid" id="sell-img-preview-grid">
+              <!-- Dynamically populated previews -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label>商品説明</label>
+            <textarea class="form-control" id="sell-desc" rows="3" placeholder="商品の詳細や特徴を入力してください。" required></textarea>
+          </div>
+          <button type="submit" class="btn-action" style="width:100%; margin-top:0.5rem; justify-content:center; background:var(--accent);">ストアに出品公開する</button>
+        </form>
+        <div style="margin-top:1.2rem; text-align:center; border-top:1px solid #e2e8f0; padding-top:1rem;">
+          <button onclick="logout()" class="btn-action" style="background:#ef4444; width:100%; justify-content:center;">🚪 ログアウト</button>
+        </div>
+      </div>
+
+      <!-- Tab 4: Circle Notices (代表・副代表・会計専用投稿フォーム ＆ 全員閲覧対応) -->
+      <div id="mypage-sec-notice" style="display:none;">
+        <!-- 代表・副代表・会計のみに表示される投稿フォーム -->
+        <div id="notice-post-area" style="display:none; background:#f0f9ff; border:1px solid var(--primary-light); padding:1.2rem; border-radius:12px; margin-bottom:1.5rem;">
+          <h3 style="font-size:1rem; color:var(--primary-dark); margin-bottom:0.8rem; display:flex; align-items:center; gap:0.4rem;">
+            📢 新規連絡を投稿（役職者限定）
+          </h3>
+          <form id="form-add-notice">
+            <div class="form-group">
+              <label>題名</label>
+              <input type="text" class="form-control" id="notice-title-input" placeholder="例: 【重要】秋期合宿の日程について" required>
+            </div>
+            <div class="form-group">
+              <label>内容</label>
+              <textarea class="form-control" id="notice-content-input" rows="3" placeholder="連絡の詳しい内容を入力してください。" required></textarea>
+            </div>
+            <button type="submit" class="btn-action" style="width:100%; justify-content:center;">📢 サークル連絡を投稿する</button>
+          </form>
+        </div>
+
+        <!-- 投稿された連絡一覧（無所属含む全員が確認可能） -->
+        <div id="notice-list-container">
+          <!-- Dynamically populated notices -->
+        </div>
+
+        <div style="margin-top:1.2rem; text-align:center; border-top:1px solid #e2e8f0; padding-top:1rem;">
+          <button onclick="logout()" class="btn-action" style="background:#ef4444; width:100%; justify-content:center;">🚪 ログアウト</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 編集モードコントロールバー -->
-  <div id="cms-floating-bar" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[150] hidden glass-panel bg-slate-900/90 text-white px-6 py-3.5 rounded-full shadow-2xl border border-white/20 flex items-center gap-4 text-xs font-bold">
-    <div class="flex items-center gap-2 text-emerald-400">
-      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-      <span>編集モード有効中</span>
+  <!-- Cart Slideover -->
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>🛒 ショッピングカート</h3>
+      <button class="modal-close" id="close-cart">✕</button>
     </div>
-    <div class="h-4 w-[1px] bg-white/20"></div>
-    <button id="cms-save-btn" class="px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white transition-all flex items-center gap-1.5 shadow-md">
-      <i class="fa-solid fa-floppy-disk"></i> 変更を保存
-    </button>
-    <button id="cms-reset-btn" class="px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-200 transition-all">
-      初期化
-    </button>
+    <div class="cart-items" id="cart-items-container">
+      <!-- Items dynamically populated -->
+    </div>
+    <div style="padding-top:1rem; border-top:1px solid #e2e8f0;">
+      <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:1rem;">
+        <span>合計</span>
+        <span id="cart-total-price">¥0</span>
+      </div>
+      <button class="btn-action" style="width:100%; justify-content:center;" onclick="alert('注文受付が完了しました。連絡メールをお待ちください！')">ご注文手続きへ</button>
+    </div>
   </div>
-
-  <!-- フッター -->
-  <footer class="bg-white/80 py-8 px-4 text-center text-xs text-slate-500 border-t border-deep-100">
-    <p>&copy; <span id="year">2026</span> 日本大学生物資源科学部 水生動物研究会. All Rights Reserved.</p>
-  </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('year').textContent = new Date().getFullYear();
+    // --- Canvas Background Animation ---
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, bubbles = [];
 
-      // モバイルメニュー
-      const menuBtn = document.getElementById('mobile-menu-btn');
-      const mobileMenu = document.getElementById('mobile-menu');
-      if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-        mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Bubble {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = height + Math.random() * 100;
+        this.radius = Math.random() * 8 + 2;
+        this.speed = Math.random() * 1.5 + 0.5;
+        this.alpha = Math.random() * 0.3 + 0.1;
+      }
+      update() {
+        this.y -= this.speed;
+        if (this.y < -10) this.reset();
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(2, 132, 199, ${this.alpha})`;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 35; i++) bubbles.push(new Bubble());
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      bubbles.forEach(b => { b.update(); b.draw(); });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // --- State Initialization ---
+    let currentUser = JSON.parse(localStorage.getItem('nu_aquatic_user') || 'null');
+    let cart = [];
+    let isCmsActive = false;
+    let selectedImageUrls = [];
+
+    let defaultProducts = [
+      { id: 1, title: 'ミシシッピアカミミガメ 識別キーホルダー', price: 600, desc: 'サークルで調査・識別された個体の甲羅パターンをあしらったアクリルキーホルダー。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23e0f2fe"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%230369a1" font-size="20" font-weight="bold">🐢 アクリルキーホルダー</text></svg>'] },
+      { id: 2, title: '水生生物調査 2025-2026 年次報告誌', price: 1000, desc: '境川遊水地公園および周辺水域での実地生態調査データをまとめたフルカラー報告冊子。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23dcfce7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2315803d" font-size="20" font-weight="bold">📖 年次報告誌</text></svg>'] },
+      { id: 3, title: 'サステナブル有機肥料試作 (500g)', price: 400, desc: '生態研究のプロセスで得られた有機資材を活用した循環型試作肥料。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23fef3c7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23b45309" font-size="20" font-weight="bold">🌱 有機培養肥料</text></svg>'] }
+    ];
+
+    let products = JSON.parse(localStorage.getItem('nu_aquatic_products') || JSON.stringify(defaultProducts));
+
+    products.forEach(p => {
+      if (!p.images && p.img) {
+        p.images = [p.img];
+      }
+    });
+
+    let defaultNotices = [
+      {
+        id: 1,
+        dateStr: '2026/10/24',
+        dayOfWeek: '土曜日',
+        title: '【重要】次回・境川遊水地公園での秋期フィールド調査について',
+        content: '今週土曜日13:00〜 境川遊水地公園にて沈砂池調査を行います。胴長靴を忘れずにご持参ください。',
+        author: '代表'
+      },
+      {
+        id: 2,
+        dateStr: '2026/10/15',
+        dayOfWeek: '木曜日',
+        title: '学園祭出展に向けたオリジナルグッズ開発ミーティング',
+        content: '来週月曜の放課後、部室にてグッズの最終確認と価格設定の話し合いを行います。',
+        author: '副代表'
+      }
+    ];
+
+    let notices = JSON.parse(localStorage.getItem('nu_aquatic_notices') || JSON.stringify(defaultNotices));
+
+    // --- Google OAuth Callback Function ---
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch(e) {
+        return null;
+      }
+    }
+
+    function handleCredentialResponse(response) {
+      const payload = parseJwt(response.credential);
+      if (!payload) {
+        alert('Googleログイン処理中にエラーが発生しました。');
+        return;
       }
 
-      // キャンバスアニメーション
-      const canvas = document.getElementById('wave-canvas');
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let w = canvas.width = window.innerWidth;
-        let h = canvas.height = window.innerHeight;
-        window.addEventListener('resize', () => {
-          w = canvas.width = window.innerWidth;
-          h = canvas.height = window.innerHeight;
-        });
+      const email = payload.email || '';
+      const name = payload.name || 'Googleユーザー';
 
-        let step = 0;
-        const bubbles = Array.from({ length: 35 }, () => ({
-          x: Math.random() * w,
-          y: h + Math.random() * 50,
-          r: Math.random() * 3.5 + 1,
-          speed: Math.random() * 0.7 + 0.2,
-          alpha: Math.random() * 0.35 + 0.1
-        }));
+      if (!email.endsWith('@g.nihon-u.ac.jp')) {
+        alert('エラー: 日本大学のアカウント (@g.nihon-u.ac.jp) のみログイン可能です。');
+        return;
+      }
 
-        function draw() {
-          ctx.clearRect(0, 0, w, h);
-          step += 0.012;
+      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+      let user = users.find(u => u.email === email);
 
-          ctx.beginPath();
-          ctx.moveTo(0, h);
-          for (let x = 0; x <= w; x += 20) {
-            ctx.lineTo(x, Math.sin(x * 0.003 + step) * 25 + Math.cos(x * 0.001 + step * 0.8) * 15 + h * 0.88);
-          }
-          ctx.lineTo(w, h);
-          ctx.fillStyle = 'rgba(186, 230, 253, 0.18)';
-          ctx.fill();
+      if (!user) {
+        // 初回Googleログイン時の自動アカウント作成（初期役職は「無所属」）
+        user = {
+          name: name,
+          email: email,
+          role: '無所属',
+          grade: '1年',
+          dept: '未登録',
+          studentId: '-',
+          phone: '-',
+          pass: 'google-oauth-authenticated'
+        };
+        users.push(user);
+        localStorage.setItem('nu_aquatic_users', JSON.stringify(users));
+      }
 
-          bubbles.forEach(b => {
-            b.y -= b.speed;
-            b.x += Math.sin(b.y * 0.01) * 0.25;
-            if (b.y < -10) {
-              b.y = h + 10;
-              b.x = Math.random() * w;
-            }
-            ctx.beginPath();
-            ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(13, 148, 136, ${b.alpha})`;
-            ctx.fill();
-          });
+      currentUser = user;
+      localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
 
-          requestAnimationFrame(draw);
+      alert(`Google認証成功: Welcome, ${name} 様！`);
+      modalAuth.classList.remove('active');
+      updateAuthUI();
+      openMypageModal();
+    }
+
+    // --- DOM Elements & Auth System ---
+    const modalAuth = document.getElementById('modal-auth');
+    const modalMypage = document.getElementById('modal-mypage');
+    const modalAllProducts = document.getElementById('modal-all-products');
+    const closeAuthModal = document.getElementById('close-auth-modal');
+    const closeMypageModal = document.getElementById('close-mypage-modal');
+    const closeAllProductsModal = document.getElementById('close-all-products-modal');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const formLogin = document.getElementById('form-login');
+    const formRegister = document.getElementById('form-register');
+    const userStatusContainer = document.getElementById('user-status-container');
+    const btnViewAllProducts = document.getElementById('btn-view-all-products');
+    const productSortSelect = document.getElementById('product-sort-select');
+
+    function updateAuthUI() {
+      if (currentUser) {
+        userStatusContainer.innerHTML = `
+          <div class="user-profile-badge" id="btn-open-mypage" title="マイページを開く">
+            🎓 ${currentUser.name} [${currentUser.role || '無所属'}] 👤
+          </div>
+        `;
+      } else {
+        userStatusContainer.innerHTML = `<button class="btn-action" id="btn-login-modal">🔑 ログイン</button>`;
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('#btn-login-modal, #btn-open-mypage');
+      if (!target) return;
+
+      if (target.id === 'btn-login-modal') {
+        if (currentUser) {
+          openMypageModal();
+        } else {
+          modalAuth.classList.add('active');
         }
-        draw();
+      } else if (target.id === 'btn-open-mypage') {
+        openMypageModal();
+      }
+    });
+
+    closeAuthModal.addEventListener('click', () => modalAuth.classList.remove('active'));
+    closeMypageModal.addEventListener('click', () => modalMypage.classList.remove('active'));
+
+    btnViewAllProducts.addEventListener('click', () => {
+      renderModalProducts();
+      modalAllProducts.classList.add('active');
+    });
+    closeAllProductsModal.addEventListener('click', () => modalAllProducts.classList.remove('active'));
+
+    productSortSelect.addEventListener('change', () => {
+      renderModalProducts();
+    });
+
+    tabLogin.addEventListener('click', () => {
+      tabLogin.classList.add('active'); tabRegister.classList.remove('active');
+      formLogin.style.display = 'block'; formRegister.style.display = 'none';
+    });
+
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active'); tabLogin.classList.remove('active');
+      formRegister.style.display = 'block'; formLogin.style.display = 'none';
+    });
+
+    formRegister.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('reg-email').value.trim();
+      const role = document.getElementById('reg-role').value;
+
+      if (!email.endsWith('@g.nihon-u.ac.jp')) {
+        alert('エラー: 日本大学のアカウント (@g.nihon-u.ac.jp) のみ登録可能です。');
+        return;
       }
 
-      // トースト通知
-      function showToast(msg, icon = 'fa-check-circle') {
-        const container = document.getElementById('toast-container');
-        if (!container) return;
-        const t = document.createElement('div');
-        t.className = 'glass-panel bg-white/95 text-slate-800 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-xs font-bold transition-all duration-300 translate-y-4 opacity-0 border border-deep-200';
-        t.innerHTML = `<i class="fa-solid ${icon} text-deep-500 text-base"></i><span>${msg}</span>`;
-        container.appendChild(t);
-        setTimeout(() => t.classList.remove('translate-y-4', 'opacity-0'), 10);
-        setTimeout(() => {
-          t.classList.add('translate-y-4', 'opacity-0');
-          setTimeout(() => t.remove(), 300);
-        }, 2500);
-      }
+      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
 
-      // EC & SVG Assets
-      const SVG_IMAGES = {
-        keyholder: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" rx="20" fill="%23f0fdfa"/><circle cx="100" cy="50" r="10" fill="none" stroke="%230d9488" stroke-width="4"/><ellipse cx="100" cy="115" rx="45" ry="50" fill="%232dd4bf"/><ellipse cx="100" cy="115" rx="32" ry="38" fill="%230f766e"/><circle cx="100" cy="58" r="10" fill="%2314b8a6"/><circle cx="85" cy="55" r="2" fill="%23000"/><circle cx="115" cy="55" r="2" fill="%23000"/></svg>',
-        tshirt: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" rx="20" fill="%23f0f9ff"/><path d="M50,60 L80,40 L120,40 L150,60 L135,90 L120,80 L120,160 L80,160 L80,80 L65,90 Z" fill="%230284c7"/><path d="M90,75 L110,75 L100,90 Z" fill="%2338bdf8"/></svg>',
-        book: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" rx="20" fill="%23f8fafc"/><rect x="50" y="40" width="100" height="120" rx="6" fill="%230369a1"/><rect x="60" y="50" width="80" height="100" rx="3" fill="%23ffffff"/><line x1="70" y1="70" x2="130" y2="70" stroke="%230284c7" stroke-width="4"/><line x1="70" y1="90" x2="120" y2="90" stroke="%2394a3b8" stroke-width="3"/></svg>',
-        sticker: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" rx="20" fill="%23f0fdf4"/><circle cx="100" cy="100" r="50" fill="%2338bdf8"/><circle cx="100" cy="100" r="22" fill="%2310b981"/></svg>',
-        agro: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" rx="20" fill="%23ecfdf5"/><path d="M60,150 L140,150 L130,90 L70,90 Z" fill="%23059669"/><path d="M100,90 L100,50 Q100,40 120,40" fill="none" stroke="%2334d399" stroke-width="4"/></svg>'
-      };
-
-      const DEFAULT_PRODUCTS = [
-        { id: 'p1', name: '水生動研 公式アカミミガメ アクリルキーホルダー', category: 'goods', price: 800, badge: '人気No.1', stock: '在庫あり', image: SVG_IMAGES.keyholder, desc: '境川の個体識別調査で活躍するアカミミガメを模したキーホルダー。' },
-        { id: 'p2', name: 'エコキャンパス 応援Tシャツ - Aqua Edition', category: 'goods', price: 2500, badge: '限定', stock: '残りわずか', image: SVG_IMAGES.tshirt, desc: '速乾性に優れたアクティブ素材Tシャツ。' },
-        { id: 'p3', name: '境川水生生態系 調査レポート & 写真集 2026', category: 'book', price: 1200, badge: '研究成果物', stock: '在庫あり', image: SVG_IMAGES.book, desc: '境川遊水地公園での生物調査データを収録したフルカラー冊子。' },
-        { id: 'p4', name: '水生生物イラストステッカーセット (5枚入)', category: 'goods', price: 500, badge: '定番', stock: '在庫あり', image: SVG_IMAGES.sticker, desc: '耐水・耐光UV加工のステッカーセット。' },
-        { id: 'p5', name: '資源循環型農業 試作オーガニック堆肥 (500g)', category: 'agro', price: 600, badge: 'プロジェクト', stock: '数量限定', image: SVG_IMAGES.agro, desc: '保護カメの発酵糞尿を利用したサステナブル有機肥料。' }
-      ];
-
-      let PRODUCTS = JSON.parse(localStorage.getItem('aquatic_products')) || DEFAULT_PRODUCTS;
-      let cart = [];
-      let isEditMode = false;
-      let currentCategory = 'all';
-
-      // CMS Edit Mode
-      const toggleEditBtn = document.getElementById('toggle-edit-mode-btn');
-      const floatingBar = document.getElementById('cms-floating-bar');
-      const addProductBtn = document.getElementById('add-product-cms-btn');
-
-      function setEditMode(enabled) {
-        isEditMode = enabled;
-        if (toggleEditBtn) {
-          toggleEditBtn.classList.toggle('bg-deep-600', enabled);
-          toggleEditBtn.classList.toggle('text-white', enabled);
-          toggleEditBtn.innerHTML = enabled ? '<i class="fa-solid fa-check"></i> 編集モード中' : '<i class="fa-solid fa-pen-to-square text-deep-600"></i> サイト編集';
-        }
-        if (floatingBar) floatingBar.classList.toggle('hidden', !enabled);
-        if (addProductBtn) addProductBtn.classList.toggle('hidden', !enabled);
-
-        document.querySelectorAll('h1, h2, h3, p, span').forEach(el => {
-          if (el.closest('nav') || el.closest('#cart-drawer') || el.closest('button')) return;
-          el.contentEditable = enabled;
-          el.classList.toggle('cms-editable-active', enabled);
-        });
-
-        renderProducts(currentCategory);
-        showToast(enabled ? 'サイト編集モードが有効になりました。テキストをタップして直接書き換えられます。' : '編集モードを終了しました。', 'fa-pen');
-      }
-
-      toggleEditBtn?.addEventListener('click', () => setEditMode(!isEditMode));
-
-      document.getElementById('cms-save-btn')?.addEventListener('click', () => {
-        localStorage.setItem('aquatic_products', JSON.stringify(PRODUCTS));
-        setEditMode(false);
-        showToast('変更内容を正常に保存しました！', 'fa-floppy-disk');
-      });
-
-      document.getElementById('cms-reset-btn')?.addEventListener('click', () => {
-        if (confirm('すべてのカスタマイズを破棄して初期状態に戻しますか？')) {
-          localStorage.removeItem('aquatic_products');
-          location.reload();
-        }
-      });
-
-      addProductBtn?.addEventListener('click', () => {
-        PRODUCTS.push({
-          id: 'p_' + Date.now(),
-          name: '新商品（タイトルを編集してください）',
-          category: 'goods',
-          price: 1000,
-          badge: 'NEW',
-          stock: '在庫あり',
-          image: SVG_IMAGES.keyholder,
-          desc: '商品の説明を入力してください。'
-        });
-        renderProducts(currentCategory);
-        showToast('新しい商品を追加しました。');
-      });
-
-      window.deleteProduct = function(id) {
-        if (confirm('この商品を削除しますか？')) {
-          PRODUCTS = PRODUCTS.filter(p => p.id !== id);
-          renderProducts(currentCategory);
-          showToast('商品を削除しました。');
-        }
-      };
-
-      // Cart Logic
-      window.addToCart = function(id) {
-        const product = PRODUCTS.find(p => p.id === id);
-        if (!product) return;
-        const existing = cart.find(i => i.id === id);
-        if (existing) existing.quantity += 1;
-        else cart.push({ ...product, quantity: 1 });
-        updateCartUI();
-        showToast(`「${product.name}」をカートに追加しました`);
-      };
-
-      window.updateQuantity = function(id, delta) {
-        const item = cart.find(i => i.id === id);
-        if (!item) return;
-        item.quantity += delta;
-        if (item.quantity <= 0) cart = cart.filter(i => i.id !== id);
-        updateCartUI();
-      };
-
-      function renderProducts(category = 'all') {
-        currentCategory = category;
-        const grid = document.getElementById('product-grid');
-        if (!grid) return;
-        grid.innerHTML = '';
-        const filtered = category === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === category);
-
-        filtered.forEach(p => {
-          const card = document.createElement('div');
-          card.className = 'glass-panel rounded-3xl p-5 glass-card-hover flex flex-col justify-between relative group';
-          card.innerHTML = `
-            ${isEditMode ? `<button onclick="deleteProduct('${p.id}')" class="absolute -top-2 -right-2 z-20 w-7 h-7 rounded-full bg-red-500 text-white text-xs flex items-center justify-center shadow-md"><i class="fa-solid fa-trash"></i></button>` : ''}
-            <div class="space-y-4">
-              <div class="w-full h-44 rounded-2xl bg-slate-50 overflow-hidden relative flex items-center justify-center cursor-pointer" onclick="openProductModal('${p.id}')">
-                <img src="${p.image}" alt="${p.name}" class="h-full w-full object-contain p-4 group-hover:scale-105 transition-transform duration-300">
-                ${p.badge ? `<span class="absolute top-3 left-3 text-[10px] font-black uppercase tracking-wider bg-white/90 text-deep-800 px-2.5 py-1 rounded-full shadow-sm">${p.badge}</span>` : ''}
-              </div>
-              <div>
-                <div class="text-[11px] font-bold text-deep-500 mb-1">${p.stock}</div>
-                <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-snug cursor-pointer" ${isEditMode ? 'contenteditable="true"' : ''} onblur="updateProductText('${p.id}', 'name', this.innerText)">${p.name}</h3>
-              </div>
-            </div>
-            <div class="pt-4 mt-4 border-t border-deep-100 flex items-center justify-between">
-              <div class="text-slate-900 font-extrabold text-lg">¥<span ${isEditMode ? 'contenteditable="true"' : ''} onblur="updateProductPrice('${p.id}', this.innerText)">${p.price.toLocaleString()}</span></div>
-              <button onclick="addToCart('${p.id}')" class="px-3.5 py-2 rounded-full btn-gradient text-xs font-bold flex items-center gap-1.5 shadow-md">
-                <i class="fa-solid fa-plus text-[10px]"></i> カート追加
-              </button>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-      }
-
-      window.updateProductText = function(id, key, val) {
-        const item = PRODUCTS.find(p => p.id === id);
-        if (item) item[key] = val.trim();
-      };
-
-      window.updateProductPrice = function(id, val) {
-        const item = PRODUCTS.find(p => p.id === id);
-        const parsed = parseInt(val.replace(/,/g, ''), 10);
-        if (item && !isNaN(parsed)) item.price = parsed;
-      };
-
-      function updateCartUI() {
-        const count = cart.reduce((s, i) => s + i.quantity, 0);
-        const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
-
-        ['cart-badge', 'cart-badge-mobile'].forEach(id => {
-          const b = document.getElementById(id);
-          if (b) {
-            b.textContent = count;
-            b.style.transform = count > 0 ? 'scale(1)' : 'scale(0)';
-          }
-        });
-
-        const cartTotalEl = document.getElementById('cart-total-price');
-        const checkoutTotalEl = document.getElementById('checkout-total-price');
-        if (cartTotalEl) cartTotalEl.textContent = `¥${total.toLocaleString()}`;
-        if (checkoutTotalEl) checkoutTotalEl.textContent = `¥${total.toLocaleString()}`;
-
-        const checkoutBtn = document.getElementById('checkout-btn');
-        if (checkoutBtn) checkoutBtn.disabled = cart.length === 0;
-
-        const container = document.getElementById('cart-items-container');
-        if (!container) return;
-        container.innerHTML = '';
-
-        if (cart.length === 0) {
-          container.innerHTML = `<div class="text-center py-12 text-slate-400 space-y-3"><i class="fa-solid fa-basket-shopping text-4xl"></i><p class="text-xs font-bold">カートは空です</p></div>`;
+      if (role !== '無所属') {
+        const existingRoleUser = users.find(u => u.role === role);
+        if (existingRoleUser) {
+          alert(`⚠️ 警告: 「${role}」は既に登録されています (${existingRoleUser.name} 様)。「${role}」は1人のみ登録可能です。`);
           return;
         }
-
-        cart.forEach(item => {
-          const row = document.createElement('div');
-          row.className = 'flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-100';
-          row.innerHTML = `
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-white p-1 border border-slate-100 flex items-center justify-center"><img src="${item.image}" class="h-full w-full object-contain"></div>
-              <div>
-                <h4 class="font-bold text-xs text-slate-800 line-clamp-1">${item.name}</h4>
-                <div class="text-xs text-deep-700 font-extrabold">¥${(item.price * item.quantity).toLocaleString()}</div>
-              </div>
-            </div>
-            <div class="flex items-center gap-2">
-              <button onclick="updateQuantity('${item.id}', -1)" class="w-6 h-6 rounded-full bg-white border border-slate-200 text-slate-600 flex items-center justify-center text-xs"><i class="fa-solid fa-minus text-[10px]"></i></button>
-              <span class="text-xs font-bold text-slate-800 w-4 text-center">${item.quantity}</span>
-              <button onclick="updateQuantity('${item.id}', 1)" class="w-6 h-6 rounded-full bg-white border border-slate-200 text-slate-600 flex items-center justify-center text-xs"><i class="fa-solid fa-plus text-[10px]"></i></button>
-            </div>
-          `;
-          container.appendChild(row);
-        });
       }
 
-      window.openProductModal = function(id) {
-        const p = PRODUCTS.find(i => i.id === id);
-        if (!p) return;
-        const modalContent = document.getElementById('modal-product-content');
-        if (modalContent) {
-          modalContent.innerHTML = `
-            <div class="space-y-4">
-              <div class="w-full h-48 rounded-2xl bg-slate-50 flex items-center justify-center"><img src="${p.image}" class="h-full w-full object-contain p-4"></div>
-              <div>
-                <span class="inline-block text-[11px] font-bold text-deep-600 bg-deep-50 px-2.5 py-1 rounded-full mb-2">${p.stock}</span>
-                <h3 class="text-lg font-bold text-slate-900">${p.name}</h3>
-                <div class="text-2xl font-black text-deep-700 mt-1">¥${p.price.toLocaleString()}</div>
-              </div>
-              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">${p.desc}</p>
-              <button onclick="addToCart('${p.id}'); closeProductModal();" class="w-full py-3.5 rounded-xl btn-gradient font-bold text-sm shadow-md">カートに追加する (¥${p.price.toLocaleString()})</button>
-            </div>
-          `;
-        }
-        document.getElementById('product-modal')?.classList.remove('hidden');
+      if (users.some(u => u.email === email)) {
+        alert('このメールアドレスは既に登録されています。');
+        return;
+      }
+
+      const user = {
+        name: document.getElementById('reg-name').value,
+        email: email,
+        role: role,
+        grade: document.getElementById('reg-grade').value,
+        dept: document.getElementById('reg-dept').value,
+        studentId: document.getElementById('reg-student-id').value,
+        phone: document.getElementById('reg-phone').value,
+        pass: document.getElementById('reg-pass').value
       };
 
-      window.closeProductModal = function() {
-        document.getElementById('product-modal')?.classList.add('hidden');
-      };
+      users.push(user);
+      localStorage.setItem('nu_aquatic_users', JSON.stringify(users));
 
-      // Cart Drawer Modal
-      const cartDrawer = document.getElementById('cart-drawer');
-      const cartContent = document.getElementById('cart-content');
-      function openCartDrawer() {
-        cartDrawer?.classList.remove('pointer-events-none', 'opacity-0');
-        cartContent?.classList.remove('translate-x-full');
-      }
-      function closeCartDrawer() {
-        cartDrawer?.classList.add('pointer-events-none', 'opacity-0');
-        cartContent?.classList.add('translate-x-full');
-      }
+      currentUser = user;
+      localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
 
-      document.getElementById('open-cart-btn')?.addEventListener('click', openCartDrawer);
-      document.getElementById('open-cart-btn-mobile')?.addEventListener('click', openCartDrawer);
-      document.getElementById('close-cart-btn')?.addEventListener('click', closeCartDrawer);
-      document.getElementById('cart-backdrop')?.addEventListener('click', closeCartDrawer);
-
-      // Category Tabs
-      document.querySelectorAll('.store-tab').forEach(tab => {
-        tab.addEventListener('click', (e) => {
-          document.querySelectorAll('.store-tab').forEach(t => {
-            t.classList.remove('active', 'bg-deep-600', 'text-white', 'shadow-md');
-            t.classList.add('bg-white', 'text-slate-700');
-          });
-          e.target.classList.add('active', 'bg-deep-600', 'text-white', 'shadow-md');
-          e.target.classList.remove('bg-white', 'text-slate-700');
-          renderProducts(e.target.dataset.category);
-        });
-      });
-
-      // Checkout
-      const checkoutModal = document.getElementById('checkout-modal');
-      document.getElementById('checkout-btn')?.addEventListener('click', () => {
-        closeCartDrawer();
-        document.getElementById('checkout-form-container')?.classList.remove('hidden');
-        document.getElementById('checkout-success')?.classList.add('hidden');
-        checkoutModal?.classList.remove('hidden');
-      });
-
-      document.getElementById('close-checkout-modal')?.addEventListener('click', () => checkoutModal?.classList.add('hidden'));
-      document.getElementById('close-product-modal')?.addEventListener('click', () => window.closeProductModal());
-
-      document.getElementById('order-form')?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        document.getElementById('checkout-form-container')?.classList.add('hidden');
-        document.getElementById('checkout-success')?.classList.remove('hidden');
-        cart = [];
-        updateCartUI();
-      });
-
-      document.getElementById('close-success-btn')?.addEventListener('click', () => checkoutModal?.classList.add('hidden'));
-
-      renderProducts('all');
-      updateCartUI();
+      alert('登録が完了しました！マイページを開きます。');
+      modalAuth.classList.remove('active');
+      updateAuthUI();
+      openMypageModal();
     });
+
+    formLogin.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const pass = document.getElementById('login-pass').value;
+
+      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+      const found = users.find(u => u.email === email && u.pass === pass);
+
+      if (found) {
+        currentUser = found;
+        localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
+        modalAuth.classList.remove('active');
+        updateAuthUI();
+        openMypageModal();
+      } else {
+        alert('メールアドレスまたはパスワードが正しくありません。');
+      }
+    });
+
+    // --- Mypage Modal System ---
+    const tabMypageProfile = document.getElementById('tab-mypage-profile');
+    const tabMypageMembers = document.getElementById('tab-mypage-members');
+    const tabMypageSell = document.getElementById('tab-mypage-sell');
+    const tabMypageNotice = document.getElementById('tab-mypage-notice');
+
+    const secProfile = document.getElementById('mypage-sec-profile');
+    const secMembers = document.getElementById('mypage-sec-members');
+    const secSell = document.getElementById('mypage-sec-sell');
+    const secNotice = document.getElementById('mypage-sec-notice');
+    const adminCmsArea = document.getElementById('admin-cms-area');
+    const noticePostArea = document.getElementById('notice-post-area');
+
+    function openMypageModal() {
+      if (!currentUser) return;
+      document.getElementById('mypage-welcome-msg').textContent = `${currentUser.email} (${currentUser.role || '無所属'})`;
+      document.getElementById('mypage-name').value = currentUser.name || '';
+      document.getElementById('mypage-role').value = currentUser.role || '無所属';
+      document.getElementById('mypage-grade').value = currentUser.grade || '1年';
+      document.getElementById('mypage-dept').value = currentUser.dept || '';
+      document.getElementById('mypage-phone').value = currentUser.phone || '';
+      
+      if (currentUser.role === '代表' || currentUser.role === '副代表') {
+        adminCmsArea.style.display = 'block';
+      } else {
+        adminCmsArea.style.display = 'none';
+      }
+
+      if (['代表', '副代表', '会計'].includes(currentUser.role)) {
+        noticePostArea.style.display = 'block';
+      } else {
+        noticePostArea.style.display = 'none';
+      }
+
+      renderMemberList();
+      renderNoticeList();
+      modalMypage.classList.add('active');
+    }
+
+    function renderMemberList() {
+      const tbody = document.getElementById('member-list-body');
+      tbody.innerHTML = '';
+      const users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">登録されたメンバーはいません。</td></tr>';
+        return;
+      }
+
+      users.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${u.name || '未設定'}</strong></td>
+          <td><span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:0.75rem;">${u.role || '無所属'}</span></td>
+          <td>${u.grade || '-'}</td>
+          <td>${u.dept || '-'}</td>
+          <td style="word-break:break-all;">${u.email || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderNoticeList() {
+      const container = document.getElementById('notice-list-container');
+      container.innerHTML = '';
+
+      if (notices.length === 0) {
+        container.innerHTML = '<p style="text-align:center; padding:1.5rem; color:var(--text-muted);">サークル連絡はありません。</p>';
+        return;
+      }
+
+      notices.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'notice-item';
+        div.innerHTML = `
+          <div class="notice-date">📅 ${item.dateStr} (${item.dayOfWeek}) <span class="notice-author">✍️ 投稿者: ${item.author || '役職者'}</span></div>
+          <div class="notice-title">${item.title}</div>
+          <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem; white-space:pre-wrap;">${item.content}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById('form-add-notice').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!currentUser || !['代表', '副代表', '会計'].includes(currentUser.role)) {
+        alert('エラー: サークル連絡を投稿できるのは代表・副代表・会計のみです。');
+        return;
+      }
+
+      const title = document.getElementById('notice-title-input').value.trim();
+      const content = document.getElementById('notice-content-input').value.trim();
+
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const dateStr = `${year}/${month}/${day}`;
+
+      const days = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
+      const dayOfWeek = days[now.getDay()];
+
+      const newNotice = {
+        id: Date.now(),
+        dateStr: dateStr,
+        dayOfWeek: dayOfWeek,
+        title: title,
+        content: content,
+        author: `${currentUser.name} (${currentUser.role})`
+      };
+
+      notices.unshift(newNotice);
+      localStorage.setItem('nu_aquatic_notices', JSON.stringify(notices));
+
+      renderNoticeList();
+      alert('サークル連絡を投稿しました！');
+      document.getElementById('form-add-notice').reset();
+    });
+
+    function resetMypageTabs() {
+      [tabMypageProfile, tabMypageMembers, tabMypageSell, tabMypageNotice].forEach(t => t.classList.remove('active'));
+      [secProfile, secMembers, secSell, secNotice].forEach(s => s.style.display = 'none');
+    }
+
+    tabMypageProfile.addEventListener('click', () => {
+      resetMypageTabs();
+      tabMypageProfile.classList.add('active');
+      secProfile.style.display = 'block';
+    });
+
+    tabMypageMembers.addEventListener('click', () => {
+      resetMypageTabs();
+      tabMypageMembers.classList.add('active');
+      secMembers.style.display = 'block';
+      renderMemberList();
+    });
+
+    tabMypageSell.addEventListener('click', () => {
+      resetMypageTabs();
+      tabMypageSell.classList.add('active');
+      secSell.style.display = 'block';
+    });
+
+    tabMypageNotice.addEventListener('click', () => {
+      resetMypageTabs();
+      tabMypageNotice.classList.add('active');
+      secNotice.style.display = 'block';
+      renderNoticeList();
+    });
+
+    document.getElementById('form-update-profile').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!currentUser) return;
+
+      const newRole = document.getElementById('mypage-role').value;
+      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+
+      if (newRole !== '無所属' && newRole !== currentUser.role) {
+        const existingRoleUser = users.find(u => u.role === newRole && u.email !== currentUser.email);
+        if (existingRoleUser) {
+          alert(`⚠️ 警告: 「${newRole}」は既に登録されています (${existingRoleUser.name} 様)。「${newRole}」は1人のみ登録可能です。`);
+          return;
+        }
+      }
+
+      currentUser.name = document.getElementById('mypage-name').value;
+      currentUser.role = newRole;
+      currentUser.grade = document.getElementById('mypage-grade').value;
+      currentUser.dept = document.getElementById('mypage-dept').value;
+      currentUser.phone = document.getElementById('mypage-phone').value;
+
+      localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
+
+      const idx = users.findIndex(u => u.email === currentUser.email);
+      if (idx !== -1) {
+        users[idx] = currentUser;
+        localStorage.setItem('nu_aquatic_users', JSON.stringify(users));
+      }
+
+      alert('プロフィール情報を更新しました！');
+      updateAuthUI();
+      openMypageModal();
+    });
+
+    const sellImagesInput = document.getElementById('sell-images');
+    const sellImgPreviewGrid = document.getElementById('sell-img-preview-grid');
+
+    sellImagesInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files);
+      if (files.length === 0) return;
+
+      const remainingSlots = 4 - selectedImageUrls.length;
+      if (remainingSlots <= 0) {
+        alert('画像は最大4枚まで登録可能です。');
+        return;
+      }
+
+      const filesToProcess = files.slice(0, remainingSlots);
+      let loadedCount = 0;
+
+      filesToProcess.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          selectedImageUrls.push(evt.target.result);
+          loadedCount++;
+          if (loadedCount === filesToProcess.length) {
+            renderImagePreviews();
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+
+      sellImagesInput.value = '';
+    });
+
+    function renderImagePreviews() {
+      sellImgPreviewGrid.innerHTML = '';
+      selectedImageUrls.forEach((url, idx) => {
+        const div = document.createElement('div');
+        div.className = 'img-preview-item';
+        div.innerHTML = `
+          <img src="${url}" alt="プレビュー ${idx + 1}">
+          <button type="button" class="remove-img-btn" onclick="removeSelectedImage(${idx})">✕</button>
+        `;
+        sellImgPreviewGrid.appendChild(div);
+      });
+    }
+
+    window.removeSelectedImage = function(index) {
+      selectedImageUrls.splice(index, 1);
+      renderImagePreviews();
+    };
+
+    document.getElementById('form-sell-product').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('sell-title').value.trim();
+      const price = parseInt(document.getElementById('sell-price').value);
+      const desc = document.getElementById('sell-desc').value.trim();
+
+      const defaultImg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23e0f2fe"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%230284c7" font-size="18" font-weight="bold">📦 出品商品</text></svg>';
+
+      const finalImages = selectedImageUrls.length > 0 ? [...selectedImageUrls] : [defaultImg];
+
+      const newProd = {
+        id: Date.now(),
+        title: title,
+        price: price,
+        desc: desc,
+        images: finalImages
+      };
+
+      products.push(newProd);
+      localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
+      renderProducts();
+      if (modalAllProducts.classList.contains('active')) {
+        renderModalProducts();
+      }
+
+      alert(`商品（画像 ${finalImages.length} 枚）を出品公開しました！`);
+      document.getElementById('form-sell-product').reset();
+      selectedImageUrls = [];
+      sellImgPreviewGrid.innerHTML = '';
+      modalMypage.classList.remove('active');
+    });
+
+    window.logout = function() {
+      currentUser = null;
+      localStorage.removeItem('nu_aquatic_user');
+
+      if (isCmsActive) {
+        isCmsActive = false;
+        document.body.classList.remove('cms-active');
+        document.getElementById('cms-controls').classList.remove('active');
+        btnAddProduct.style.display = 'none';
+        disableContentEditable();
+      }
+
+      modalMypage.classList.remove('active');
+      updateAuthUI();
+      alert('ログアウトしました。');
+    };
+
+    window.resetAllData = function() {
+      if (confirm('登録されているすべてのユーザー情報およびWebサイトの編集データを完全に初期化しますか？')) {
+        localStorage.clear();
+        alert('データをすべて削除しました。リロードします。');
+        location.reload();
+      }
+    };
+
+    function createProductCardHTML(p) {
+      const imgs = p.images && p.images.length > 0 ? p.images : [p.img || ''];
+      const mainImgSrc = imgs[0];
+
+      let thumbsHtml = '';
+      if (imgs.length > 1) {
+        thumbsHtml = `<div class="product-thumbs">` + 
+          imgs.map((src, i) => `<img src="${src}" class="product-thumb ${i===0 ? 'active':''}" onclick="switchProductMainImage(${p.id}, ${i}, this)" alt="サムネイル">`).join('') +
+        `</div>`;
+      }
+
+      return `
+        <button class="delete-item-btn" onclick="deleteProduct(${p.id})">✕</button>
+        <div class="product-img-wrapper">
+          <img src="${mainImgSrc}" class="product-img" id="main-img-${p.id}" alt="${p.title}">
+        </div>
+        ${thumbsHtml}
+        <div class="product-body">
+          <div class="product-title ${isCmsActive ? 'editable-field' : ''}" id="prod-title-${p.id}">${p.title}</div>
+          <div class="product-desc ${isCmsActive ? 'editable-field' : ''}" id="prod-desc-${p.id}">${p.desc}</div>
+          <div class="product-footer">
+            <div class="product-price">¥<span class="${isCmsActive ? 'editable-field' : ''}" id="prod-price-${p.id}">${p.price}</span></div>
+            <button class="btn-add-cart" onclick="addToCart(${p.id})">カートに追加</button>
+          </div>
+        </div>
+      `;
+    }
+
+    const productContainer = document.getElementById('product-container');
+    const modalProductContainer = document.getElementById('modal-product-container');
+    const allProductsCount = document.getElementById('all-products-count');
+
+    function renderProducts() {
+      productContainer.innerHTML = '';
+      const displayProducts = products.slice(0, 4);
+
+      displayProducts.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = createProductCardHTML(p);
+        productContainer.appendChild(card);
+      });
+
+      if (isCmsActive) enableContentEditable();
+    }
+
+    function renderModalProducts() {
+      modalProductContainer.innerHTML = '';
+      allProductsCount.textContent = `全 ${products.length} 件`;
+
+      let sortedProducts = [...products];
+      const sortValue = productSortSelect.value;
+
+      if (sortValue === 'newest') {
+        sortedProducts.reverse();
+      } else if (sortValue === 'price-asc') {
+        sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
+      } else if (sortValue === 'price-desc') {
+        sortedProducts.sort((a, b) => Number(b.price) - Number(a.price));
+      }
+
+      sortedProducts.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = createProductCardHTML(p);
+        modalProductContainer.appendChild(card);
+      });
+
+      if (isCmsActive) enableContentEditable();
+    }
+
+    window.switchProductMainImage = function(productId, imgIndex, thumbEl) {
+      const prod = products.find(p => p.id === productId);
+      if (!prod) return;
+      const imgs = prod.images || [prod.img];
+
+      const parentCard = thumbEl.closest('.product-card');
+      if (parentCard) {
+        const mainImg = parentCard.querySelector('.product-img');
+        if (mainImg && imgs[imgIndex]) {
+          mainImg.src = imgs[imgIndex];
+        }
+        parentCard.querySelectorAll('.product-thumb').forEach(t => t.classList.remove('active'));
+        thumbEl.classList.add('active');
+      }
+    };
+
+    window.addToCart = function(id) {
+      const prod = products.find(p => p.id === id);
+      cart.push(prod);
+      updateCartUI();
+    };
+
+    window.deleteProduct = function(id) {
+      products = products.filter(p => p.id !== id);
+      localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
+      renderProducts();
+      if (modalAllProducts.classList.contains('active')) {
+        renderModalProducts();
+      }
+    };
+
+    document.getElementById('btn-add-product').addEventListener('click', () => {
+      const newProd = {
+        id: Date.now(),
+        title: '新オリジナル商品',
+        price: 500,
+        desc: '商品の説明テキストを入力してください。',
+        images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23f1f5f9"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23475569" font-size="20">✨ NEW ITEM</text></svg>']
+      };
+      products.push(newProd);
+      localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
+      renderProducts();
+      if (modalAllProducts.classList.contains('active')) {
+        renderModalProducts();
+      }
+    });
+
+    // --- Cart System ---
+    const cartDrawer = document.getElementById('cart-drawer');
+    const btnCartToggle = document.getElementById('btn-cart-toggle');
+    const closeCart = document.getElementById('close-cart');
+    const cartCount = document.getElementById('cart-count');
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    const cartTotalPrice = document.getElementById('cart-total-price');
+
+    btnCartToggle.addEventListener('click', () => cartDrawer.classList.add('active'));
+    closeCart.addEventListener('click', () => cartDrawer.classList.remove('active'));
+
+    function updateCartUI() {
+      cartCount.textContent = cart.length;
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += Number(item.price);
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div style="flex-grow:1;">
+            <div class="cart-item-title">${item.title}</div>
+            <div class="cart-item-price">¥${item.price}</div>
+          </div>
+          <button onclick="removeFromCart(${index})" style="border:none; background:none; cursor:pointer;">🗑️</button>
+        `;
+        cartItemsContainer.appendChild(div);
+      });
+
+      cartTotalPrice.textContent = `¥${total}`;
+    }
+
+    window.removeFromCart = function(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    };
+
+    // --- CMS Live Editor System ---
+    const cmsControls = document.getElementById('cms-controls');
+    const btnAddProduct = document.getElementById('btn-add-product');
+
+    document.getElementById('btn-cms-toggle-mypage').addEventListener('click', () => {
+      if (!currentUser || (currentUser.role !== '代表' && currentUser.role !== '副代表')) {
+        alert('🔒 サイトの編集権限があるのは代表および副代表のみです。');
+        return;
+      }
+
+      isCmsActive = !isCmsActive;
+      document.body.classList.toggle('cms-active', isCmsActive);
+      cmsControls.classList.toggle('active', isCmsActive);
+      btnAddProduct.style.display = isCmsActive ? 'inline-flex' : 'none';
+
+      const btnMypageCMS = document.getElementById('btn-cms-toggle-mypage');
+      if (isCmsActive) {
+        btnMypageCMS.textContent = '❌ 編集モードを終了';
+        btnMypageCMS.style.background = 'var(--warning)';
+        enableContentEditable();
+      } else {
+        btnMypageCMS.textContent = '✏️ サイト編集モードを起動';
+        btnMypageCMS.style.background = '';
+        disableContentEditable();
+      }
+
+      modalMypage.classList.remove('active');
+    });
+
+    function enableContentEditable() {
+      document.querySelectorAll('.editable-field').forEach(el => el.setAttribute('contenteditable', 'true'));
+    }
+
+    function disableContentEditable() {
+      document.querySelectorAll('.editable-field').forEach(el => el.removeAttribute('contenteditable'));
+    }
+
+    document.getElementById('btn-save-cms').addEventListener('click', () => {
+      if (!currentUser || (currentUser.role !== '代表' && currentUser.role !== '副代表')) return;
+
+      document.querySelectorAll('.editable-field[id]').forEach(el => {
+        if (!el.id.startsWith('prod-')) {
+          localStorage.setItem('cms_' + el.id, el.innerHTML);
+        }
+      });
+
+      products.forEach(p => {
+        const t = document.getElementById(`prod-title-${p.id}`);
+        const d = document.getElementById(`prod-desc-${p.id}`);
+        const pr = document.getElementById(`prod-price-${p.id}`);
+        if (t) p.title = t.innerText;
+        if (d) p.desc = d.innerText;
+        if (pr) p.price = parseInt(pr.innerText) || p.price;
+      });
+
+      localStorage.setItem('nu_aquatic_products', JSON.stringify(products));
+      alert('変更をブラウザに保存しました！');
+    });
+
+    document.getElementById('btn-reset-cms').addEventListener('click', () => {
+      if (!currentUser || (currentUser.role !== '代表' && currentUser.role !== '副代表')) return;
+
+      if (confirm('すべての編集内容を初期データに戻しますか？')) {
+        Object.keys(localStorage).forEach(k => {
+          if (k.startsWith('cms_')) localStorage.removeItem(k);
+        });
+        localStorage.removeItem('nu_aquatic_products');
+        localStorage.removeItem('nu_aquatic_notices');
+        location.reload();
+      }
+    });
+
+    function loadSavedCMSData() {
+      document.querySelectorAll('.editable-field[id]').forEach(el => {
+        const saved = localStorage.getItem('cms_' + el.id);
+        if (saved) el.innerHTML = saved;
+      });
+    }
+
+    // Init
+    updateAuthUI();
+    renderProducts();
+    loadSavedCMSData();
   </script>
 </body>
 </html>
