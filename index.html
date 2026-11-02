@@ -908,89 +908,26 @@
     </div>
   </div>
 
-  <!-- Login/Register Modal -->
+<!-- Login/Register Modal -->
   <div class="modal-overlay" id="modal-auth">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width: 420px; text-align: center;">
       <button class="modal-close" id="close-auth-modal">✕</button>
       
+      <h2 style="font-size:1.3rem; color:var(--primary-dark); margin-bottom:1rem;">🔑 メンバーログイン</h2>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">
+        日本大学のGoogleアカウント（@g.nihon-u.ac.jp）を使用してログインしてください。
+      </p>
+
       <!-- Google Auth Button Box -->
-      <div class="google-auth-box">
-        <p>🌐 日大Googleアカウント (@g.nihon-u.ac.jp) で簡単ログイン</p>
+      <div class="google-auth-box" style="margin-bottom:0;">
         <div style="display: flex; justify-content: center;">
-          <!-- Google ログインボタン表示領域 -->
-         <div id="g_id_onload"
- 　　　　　 data-client_id="21717906266-jvrshf0s5ob9kiakqtsb34dq0umfvv73.apps.googleusercontent.com"
- 　　　　　 data-callback="handleCredentialResponse">
-　　　　　</div>
+          <div id="g_id_onload"
+            data-client_id="21717906266-jvrshf0s5ob9kiakqtsb34dq0umfvv73.apps.googleusercontent.com"
+            data-callback="handleCredentialResponse">
+          </div>
           <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large"></div>
         </div>
       </div>
-
-      <div class="divider-or">または メールアドレスで手続き</div>
-
-      <div class="tab-group">
-        <button class="tab-btn active" id="tab-login">ログイン</button>
-        <button class="tab-btn" id="tab-register">新規アカウント登録</button>
-      </div>
-
-      <!-- Login Form -->
-      <form id="form-login">
-        <div class="form-group">
-          <label>日大メールアドレス (@g.nihon-u.ac.jp)</label>
-          <input type="email" class="form-control" id="login-email" placeholder="example@g.nihon-u.ac.jp" required>
-        </div>
-        <div class="form-group">
-          <label>パスワード</label>
-          <input type="password" class="form-control" id="login-pass" required>
-        </div>
-        <button type="submit" class="btn-action" style="width:100%; margin-top:1rem; justify-content:center;">ログイン</button>
-      </form>
-
-      <!-- Register Form -->
-      <form id="form-register" style="display:none;">
-        <div class="form-group">
-          <label>氏名</label>
-          <input type="text" class="form-control" id="reg-name" placeholder="日大 太郎" required>
-        </div>
-        <div class="form-group">
-          <label>日大メールアドレス (*@g.nihon-u.ac.jp のみ可)</label>
-          <input type="email" class="form-control" id="reg-email" placeholder="xxx12345@g.nihon-u.ac.jp" required>
-        </div>
-        <div class="form-group">
-          <label>役職</label>
-          <select class="form-control" id="reg-role">
-            <option value="無所属">無所属（一般部員）</option>
-            <option value="代表">代表</option>
-            <option value="副代表">副代表</option>
-            <option value="会計">会計</option>
-          </select>
-        </div>
-        <div style="display:flex; gap:0.5rem;">
-          <div class="form-group" style="flex:1;">
-            <label>学年</label>
-            <select class="form-control" id="reg-grade">
-              <option>1年</option><option>2年</option><option>3年</option><option>4年</option><option>大学院生</option>
-            </select>
-          </div>
-          <div class="form-group" style="flex:2;">
-            <label>学部・学科</label>
-            <input type="text" class="form-control" id="reg-dept" placeholder="生物資源科学部 海洋生物学科" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>学籍番号</label>
-          <input type="text" class="form-control" id="reg-student-id" placeholder="例: A1234567" required>
-        </div>
-        <div class="form-group">
-          <label>電話番号</label>
-          <input type="tel" class="form-control" id="reg-phone" placeholder="090-0000-0000" required>
-        </div>
-        <div class="form-group">
-          <label>パスワードの設定</label>
-          <input type="password" class="form-control" id="reg-pass" placeholder="6文字以上" minlength="6" required>
-        </div>
-        <button type="submit" class="btn-action" style="width:100%; margin-top:1rem; justify-content:center;">新規登録してログイン</button>
-      </form>
     </div>
   </div>
 
@@ -1277,22 +1214,56 @@
       let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
       let user = users.find(u => u.email === email);
 
+    function handleCredentialResponse(response) {
+      const payload = parseJwt(response.credential);
+      if (!payload) {
+        alert('Googleログイン処理中にエラーが発生しました。');
+        return;
+      }
+
+      const email = payload.email || '';
+      const name = payload.name || 'Googleユーザー';
+
+      if (!email.endsWith('@g.nihon-u.ac.jp')) {
+        alert('エラー: 日本大学のアカウント (@g.nihon-u.ac.jp) のみログイン可能です。');
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+      let user = users.find(u => u.email === email);
+      let isFirstLogin = false;
+
       if (!user) {
-        // 初回Googleログイン時の自動アカウント作成（初期役職は「無所属」）
+        isFirstLogin = true;
+        // 初回Googleログイン時の自動登録（各項目はマイページで初期設定）
         user = {
           name: name,
           email: email,
           role: '無所属',
           grade: '1年',
-          dept: '未登録',
-          studentId: '-',
-          phone: '-',
+          dept: '未設定（マイページから入力してください）',
+          studentId: '未設定',
+          phone: '未設定',
           pass: 'google-oauth-authenticated'
         };
         users.push(user);
         localStorage.setItem('nu_aquatic_users', JSON.stringify(users));
       }
 
+      currentUser = user;
+      localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
+
+      modalAuth.classList.remove('active');
+      updateAuthUI();
+
+      if (isFirstLogin) {
+        alert(`Welcome, ${name} 様！\n初回ログインが完了しました。マイページより学部学科、学籍番号、電話番号などの初期設定を行ってください。`);
+      } else {
+        alert(`ログイン成功: Welcome, ${name} 様！`);
+      }
+
+      openMypageModal();
+    }
       currentUser = user;
       localStorage.setItem('nu_aquatic_user', JSON.stringify(currentUser));
 
