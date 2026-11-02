@@ -645,25 +645,6 @@
       margin-bottom: 0.8rem;
     }
 
-    .divider-or {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      font-weight: bold;
-      margin: 1.2rem 0;
-    }
-
-    .divider-or::before, .divider-or::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid #cbd5e1;
-    }
-
-    .divider-or:not(:empty)::before { margin-right: .5em; }
-    .divider-or:not(:empty)::after { margin-left: .5em; }
-
     /* Cart Slideover */
     .cart-drawer {
       position: fixed;
@@ -854,7 +835,6 @@
           <button class="btn-action" id="btn-add-product" style="display:none;">＋ 商品を追加</button>
         </div>
       </div>
-      <!-- ホーム上には最大4個のみ表示 -->
       <div class="store-grid" id="product-container">
         <!-- Javascript renders main 4 products here -->
       </div>
@@ -889,7 +869,6 @@
         <h2 style="font-size:1.4rem; color:var(--primary-dark);">🛍️ 公式オンラインストア 全商品一覧</h2>
       </div>
       
-      <!-- 検索・ソート機能コントロール -->
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; background:#f8fafc; padding:0.8rem 1rem; border-radius:12px; flex-wrap:wrap; gap:0.8rem;">
         <div style="font-size:0.88rem; font-weight:700; color:var(--text-muted);" id="all-products-count">全 0 件</div>
         <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -908,7 +887,7 @@
     </div>
   </div>
 
-<!-- Login/Register Modal -->
+  <!-- Login Modal (Google Auth Dedicated) -->
   <div class="modal-overlay" id="modal-auth">
     <div class="modal-card" style="max-width: 420px; text-align: center;">
       <button class="modal-close" id="close-auth-modal">✕</button>
@@ -983,7 +962,6 @@
           <button type="submit" class="btn-action" style="width:100%; margin-top:0.5rem; justify-content:center;">プロフィール変更を保存</button>
         </form>
 
-        <!-- 代表・副代表専用 編集ボタン＆データ初期化ボタン領域 -->
         <div id="admin-cms-area" style="display:none; margin-top:1rem; padding-top:1rem; border-top:1px dashed #cbd5e1;">
           <button class="btn-action btn-cms" id="btn-cms-toggle-mypage" style="width:100%; justify-content:center; margin-bottom:0.5rem;">✏️ サイト編集モードを起動</button>
           <button onclick="resetAllData()" class="btn-action" style="background:#ef4444; width:100%; justify-content:center; font-size:0.8rem;">⚠️ 登録アカウント・設定データの全消去</button>
@@ -1046,9 +1024,8 @@
         </div>
       </div>
 
-      <!-- Tab 4: Circle Notices (代表・副代表・会計専用投稿フォーム ＆ 全員閲覧対応) -->
+      <!-- Tab 4: Circle Notices -->
       <div id="mypage-sec-notice" style="display:none;">
-        <!-- 代表・副代表・会計のみに表示される投稿フォーム -->
         <div id="notice-post-area" style="display:none; background:#f0f9ff; border:1px solid var(--primary-light); padding:1.2rem; border-radius:12px; margin-bottom:1.5rem;">
           <h3 style="font-size:1rem; color:var(--primary-dark); margin-bottom:0.8rem; display:flex; align-items:center; gap:0.4rem;">
             📢 新規連絡を投稿（役職者限定）
@@ -1066,7 +1043,6 @@
           </form>
         </div>
 
-        <!-- 投稿された連絡一覧（無所属含む全員が確認可能） -->
         <div id="notice-list-container">
           <!-- Dynamically populated notices -->
         </div>
@@ -1139,8 +1115,20 @@
   }
   animate();
 
+  // --- Safe JSON Parser Helper ---
+  function safeJsonParse(key, fallback) {
+    try {
+      const item = localStorage.getItem(key);
+      if (!item || item === "undefined" || item === "null") return fallback;
+      return JSON.parse(item);
+    } catch (e) {
+      console.warn(`Failed to parse localStorage item [${key}], resetting to fallback.`, e);
+      return fallback;
+    }
+  }
+
   // --- State Initialization ---
-  let currentUser = JSON.parse(localStorage.getItem('nu_aquatic_user') || 'null');
+  let currentUser = safeJsonParse('nu_aquatic_user', null);
   let cart = [];
   let isCmsActive = false;
   let selectedImageUrls = [];
@@ -1151,14 +1139,19 @@
     { id: 3, title: 'サステナブル有機肥料試作 (500g)', price: 400, desc: '生態研究のプロセスで得られた有機資材を活用した循環型試作肥料。', images: ['data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%23fef3c7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23b45309" font-size="20" font-weight="bold">🌱 有機培養肥料</text></svg>'] }
   ];
 
-  let products = JSON.parse(localStorage.getItem('nu_aquatic_products') || JSON.stringify(defaultProducts));
-  products.forEach(p => { if (!p.images && p.img) p.images = [p.img]; });
+  let products = safeJsonParse('nu_aquatic_products', defaultProducts);
+  if (Array.isArray(products)) {
+    products.forEach(p => { if (!p.images && p.img) p.images = [p.img]; });
+  } else {
+    products = defaultProducts;
+  }
 
   let defaultNotices = [
     { id: 1, dateStr: '2026/10/24', dayOfWeek: '土曜日', title: '【重要】次回・境川遊水地公園での秋期フィールド調査について', content: '今週土曜日13:00〜 境川遊水地公園にて沈砂池調査を行います。胴長靴を忘れずにご持参ください。', author: '代表' },
     { id: 2, dateStr: '2026/10/15', dayOfWeek: '木曜日', title: '学園祭出展に向けたオリジナルグッズ開発ミーティング', content: '来週月曜の放課後、部室にてグッズの最終確認と価格設定の話し合いを行います。', author: '副代表' }
   ];
-  let notices = JSON.parse(localStorage.getItem('nu_aquatic_notices') || JSON.stringify(defaultNotices));
+  let notices = safeJsonParse('nu_aquatic_notices', defaultNotices);
+  if (!Array.isArray(notices)) notices = defaultNotices;
 
   // --- Google OAuth Callback Function ---
   function parseJwt(token) {
@@ -1189,7 +1182,7 @@
       return;
     }
 
-    let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+    let users = safeJsonParse('nu_aquatic_users', []);
     let user = users.find(u => u.email === email);
     let isFirstLogin = false;
 
@@ -1221,7 +1214,6 @@
       alert(`Welcome, ${name} 様！\n初回ログインが完了しました。マイページより学部学科・電話番号などの初期設定を行ってください。`);
     }
 
-    // 確実にマイページモーダルを起動
     setTimeout(() => {
       openMypageModal();
     }, 100);
@@ -1331,7 +1323,7 @@
     const tbody = document.getElementById('member-list-body');
     if (!tbody) return;
     tbody.innerHTML = '';
-    const users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+    const users = safeJsonParse('nu_aquatic_users', []);
 
     if (users.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">登録されたメンバーはいません。</td></tr>';
@@ -1458,7 +1450,7 @@
       if (!currentUser) return;
 
       const newRole = document.getElementById('mypage-role').value;
-      let users = JSON.parse(localStorage.getItem('nu_aquatic_users') || '[]');
+      let users = safeJsonParse('nu_aquatic_users', []);
 
       if (newRole !== '無所属' && newRole !== currentUser.role) {
         const existingRoleUser = users.find(u => u.role === newRole && u.email !== currentUser.email);
